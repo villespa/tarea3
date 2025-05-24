@@ -77,9 +77,9 @@ std::pair<Jugador, Mazmorra> Juego::iniciarJuego() {
     otros.mostrarMazmorras(otros.cargarMazmorrasCSV(this -> getDungeonsPath()).first);
 
     Mazmorra mazmorraElegida = elegirMazmorra();
-    std::vector<Mazmorra> vectorMazmorras = otros.cargarMazmorrasCSV("/home/pbn/tarea3pbn/mazmorras.csv").first;
+    std::vector<Mazmorra> vectorMazmorras = otros.cargarMazmorrasCSV("/home/pbn/tarea3/mazmorras.csv").first;
 
-    SalaJefe salaJefeElegida = otros.cargarMazmorrasCSV("/home/pbn/tarea3pbn/mazmorras.csv").second[this -> getSeleccionMazmorra() - 1];
+    SalaJefe salaJefeElegida = otros.cargarMazmorrasCSV("/home/pbn/tarea3/mazmorras.csv").second[this -> getSeleccionMazmorra() - 1];
 
     mazmorraElegida.mostrarMapa();
 
@@ -113,7 +113,7 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
     jugador.setX(posicionDeL.second);
     jugador.setY(posicionDeL.first);
 
-    while (jugador.getVida() > 0) {
+    while (jugador.getVida() > 0 && mazmorraElegida.getColumnas() > 0) {
         mostrarInstrucciones();
         char instruccion;
         mostrarEstado(jugador);
@@ -189,6 +189,7 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
             std::cout << "Usando bomba..." << std::endl;
             if (jugador.getNumBombas() > 0) {
                 jugador.usarBomba(mazmorraElegida);
+                mazmorraElegida.modificarElemento(jugador.getY(), jugador.getX(), '-');
                 std::cout << "Bomba usada!" << std::endl;
             } else {
                 std::cout << "No tienes bombas disponibles." << std::endl;
