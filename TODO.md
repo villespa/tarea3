@@ -2,20 +2,20 @@
 
 ## 🚨 Urgente - Correcciones de Compilación
 
-- [ ] **Verificar dependencias circulares** - Asegurar que las declaraciones forward estén correctas
+- [x] **Verificar dependencias circulares** - Asegurar que las declaraciones forward estén correctas
 
 ## 🎮 Funcionalidad Core del Juego
 
 ### Sistema de Movimiento
 - [x] Implementar movimiento básico del jugador
 - [x] Validación de límites del mapa
-- [ ] **Implementar cambio de dirección** - Agregar case 'd' en el switch del mainLoop
-- [ ] **Implementar mas instrucciones del menu** 
+- [x] **Implementar cambio de dirección** - Agregar case 'd' en el switch del mainLoop
+- [x] **Implementar mas instrucciones del menu** 
 
 ### Sistema de Interacción
-- [ ] **Implementar interacción con objetos** - Agregar case 'c' en el switch
-- [ ] **Sistema de llaves y puertas** - Mecánica completa
-- [ ] **Sistema de cofres** - Recompensas y objetos
+- [x] **Implementar interacción con objetos** - Agregar case 'c' en el switch
+- [x] **Sistema de llaves y puertas** - Mecánica completa
+- [x] **Sistema de cofres** - Recompensas y objetos
 
 ### Sistema de Combate
 - [ ] **Implementar ataque del jugador** - Detectar enemigos en rango
@@ -26,13 +26,14 @@
 ## 🎯 Mecánicas de Juego
 
 ### Progresión
-- [ ] **Sistema de estadísticas** - Tracking de pasos, enemigos derrotados, etc.
+- [x] **Sistema de estadísticas** - Tracking de pasos, enemigos derrotados, etc.
 - [ ] **Condiciones de victoria** - Llegar al final, derrotar jefe
 - [ ] **Condiciones de derrota** - Vida = 0
 - [ ] **Sistema de puntuación** - Score basado en performance
 
 ### Sala del Jefe
-- [ ] **Entrada a sala jefe** - Verificar llaves especiales
+- [x] **Entrada a sala jefe** - Verificar llaves especiales
+- [ ] **Cambio de mazmorra a sala jefe** 
 - [ ] **Combate con jefe** - Mecánicas especiales
 - [ ] **Recompensas especiales** - Items únicos del jefe
 
@@ -52,8 +53,8 @@
 
 ## 🐛 Bugs Conocidos
 
-- [ ] **Coordenadas confusas** - Verificar si X/Y están intercambiados
-- [ ] **Validación de movimiento** - Revisar lógica de `puedeMoverse()`
+- [ ] **Coordenadas confusas** - Verificar si X/Y están intercambiados sigue activo pero prefiero dejarlo y que funcione antes de que no me funcione
+- [x] **Validación de movimiento** - Revisar lógica de `puedeMoverse()`
 - [ ] **Manejo de entrada inválida** - Evitar crashes con inputs incorrectos
 - [ ] **Memory leaks potenciales** - Verificar gestión de memoria
 
@@ -62,9 +63,9 @@
 ## 📋 Testing
 
 ### Casos de Prueba
-- [ ] **Movimiento en todas las direcciones**
-- [ ] **Colisión con paredes/enemigos**
-- [ ] **Uso de llaves en puertas**
+- [x] **Movimiento en todas las direcciones**
+- [x] **Colisión con paredes/enemigos**
+- [x] **Uso de llaves en puertas**
 - [ ] **Combate básico**
 - [ ] **Carga de diferentes mapas**
 - [ ] **Condiciones de victoria/derrota**
