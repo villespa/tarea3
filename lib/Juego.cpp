@@ -128,14 +128,17 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
         case 'm': {
             std::cout << "se va a mover en la dirección: " << "\033[1;33m" << jugador.getDireccion() << "\033[0m " << std::endl;
             std::pair<int, int> futuraPos = mazmorraElegida.dondeSeMueveJugador(jugador);
-            std::cout << "Futura posición: (" << futuraPos.first << ", " << futuraPos.second << ")" << std::endl;
 
-            if (jugador.puedeMoverse(mazmorraElegida, futuraPos.first, futuraPos.second) && mazmorraElegida.obtenerElemento(futuraPos.first, futuraPos.second) == '-') {
+            if (jugador.puedeMoverse(mazmorraElegida, futuraPos.first, futuraPos.second)) {
                 mazmorraElegida.modificarElemento(jugador.getY(), jugador.getX(), '-');
                 jugador.mover();
                 mazmorraElegida.modificarElemento(jugador.getY(), jugador.getX(), 'L');
                 std::cout << "Jugador se ha movido a la posición: (" << jugador.getX() << ", " << jugador.getY() << ")" << std::endl;
             } else {
+                //std::cout << "No se puede mover a la posición: (" << futuraPos.first << ", " << futuraPos.second << ")" << std::endl;
+                //std::cout << "Elemento en la posición: " << mazmorraElegida.obtenerElemento(futuraPos.first, futuraPos.second) << std::endl;
+                //std::cout << "Posición actual: (" << jugador.getX() << ", " << jugador.getY() << ")" << std::endl;
+                //std::cout << "Elemento en la posición actual: " << mazmorraElegida.obtenerElemento(jugador.getY(), jugador.getX()) << std::endl;
                 std::cout << "Movimiento no permitido." << std::endl;
                 break;
         

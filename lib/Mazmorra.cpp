@@ -83,7 +83,7 @@ std::pair<int, int> Mazmorra::dondeSeMueveJugador(Jugador& jugador) {
         return std::make_pair(jugador.getX(), jugador.getY());
     }
 
-std::cout << "Posicion futura: (" << nuevoX << ", " << nuevoY << ")" << std::endl;
+    std::cout << "Posicion futura: (" << nuevoX << ", " << nuevoY << ")" << std::endl;
 
     return std::make_pair(nuevoX, nuevoY);
 }

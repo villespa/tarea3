@@ -130,14 +130,19 @@ void Jugador::mover() {
 
 
 bool Jugador::puedeMoverse(Mazmorra& mazmorra, int nuevoX, int nuevoY) {
-    if (nuevoX < 0 || nuevoX >= mazmorra.getFilas() || nuevoY < 0 || nuevoY >= mazmorra.getColumnas()) {
-        return false; // Fuera de límites
-    }
+    // if (nuevoX < 0 || nuevoX >= mazmorra.getFilas() || nuevoY < 0 || nuevoY >= mazmorra.getColumnas()) {
+    //     return false; // Fuera de límites
+    // }
+
+
+
     char elemento = mazmorra.obtenerElemento(nuevoX, nuevoY);
+    std::cout << "Elemento en la nueva posición: " << elemento << std::endl;
     if (elemento == '-') {
         return true; // Espacio vacío
     }
     else if ((elemento == 'p' || elemento == 'P') && llaves > 0) {
+
         return true; // Puerta
     }
     else if ((elemento == 'y' || elemento == 'Y') && llavesJefe > 0) {

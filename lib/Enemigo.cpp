@@ -7,10 +7,10 @@ int Enemigo::getDano() { return dano; }
 int Enemigo::getRango() { return rango; }
 int Enemigo::getFrecuenciaAtaque() { return frecuenciaAtaque; }
 
-Enemigo::Enemigo(int x, int y, std::vector<std::pair<int,int>> patronMoviemiento, int vida, int dano, int rango, int frecuenciaAtaque){
+Enemigo::Enemigo(int x, int y, std::vector<std::pair<int,int>> patronMovimeiento, int vida, int dano, int rango, int frecuenciaAtaque){
     this->x = x;
     this->y = y;
-    this->patronMovimiento = patronMoviemiento;
+    this->patronMovimiento = patronMovimeiento;
     this->vida = vida;
     this->dano = dano;
     this->rango = rango;

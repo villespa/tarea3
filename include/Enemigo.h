@@ -32,7 +32,7 @@ public:
         patronMovimiento(), pasoActual(0), atacando(false), xOriginal(0), yOriginal(0),
         recibiendoDano(false), turnosDesdeUltimoAtaque(0) {};
 
-    Enemigo(int x, int y, std::vector<std::pair<int,int>> patronMoviemiento, int vida, int dano, int rango, int frecuenciaAtaque);
+    Enemigo(int x, int y, std::vector<std::pair<int,int>> patronMovimeiento, int vida, int dano, int rango, int frecuenciaAtaque);
 
 };
 
