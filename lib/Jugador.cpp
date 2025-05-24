@@ -130,9 +130,9 @@ void Jugador::mover() {
 
 
 bool Jugador::puedeMoverse(Mazmorra& mazmorra, int nuevoX, int nuevoY) {
-    // if (nuevoX < 0 || nuevoX >= mazmorra.getFilas() || nuevoY < 0 || nuevoY >= mazmorra.getColumnas()) {
-    //     return false; // Fuera de límites
-    // }
+    if (nuevoX < 0 || nuevoX >= mazmorra.getFilas() || nuevoY < 0 || nuevoY >= mazmorra.getColumnas()) {
+        return false;
+    }
 
 
 
@@ -142,10 +142,13 @@ bool Jugador::puedeMoverse(Mazmorra& mazmorra, int nuevoX, int nuevoY) {
         return true; // Espacio vacío
     }
     else if ((elemento == 'p' || elemento == 'P') && llaves > 0) {
-
+        llaves--;
+        std::cout << "Usas una llave" << std::endl;
         return true; // Puerta
     }
     else if ((elemento == 'y' || elemento == 'Y') && llavesJefe > 0) {
+        llavesJefe--;
+        std::cout << "Usas una llave de jefe" << std::endl;
         return true; // Puerta Jefe
     }
     return false; // No se puede mover

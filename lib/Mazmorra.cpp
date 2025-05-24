@@ -24,7 +24,7 @@ void Mazmorra::mostrarMapa() const {
 }
 
 char Mazmorra::obtenerElemento(int x, int y) {
-    if (x >= 0 && x < filas && y >= 0 && y < columnas) {
+    if (y >= 0 && y < filas && x >= 0 && x < columnas) {
         std::cout << "obteniendo elemento en: " << x << ", " << y << std::endl;
         std::cout << "elemento: " << mapa[y][x] << std::endl;
         return mapa[y][x];
