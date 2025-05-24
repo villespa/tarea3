@@ -18,7 +18,7 @@ void Juego::setDungeonsPath() {
     std::string dungeonsPath;
     std::cout << "ingrese el camino del csv de mazmorras:" << std::endl;
     // std::cin >> dungeonsPath;
-    dungeonsPath = "/home/pbn/tarea3pbn/mazmorras.csv";
+    dungeonsPath = "/home/pbn/tarea3/mazmorras.csv";
 
     this->dungeonsPath = dungeonsPath;
 }
@@ -26,7 +26,7 @@ void Juego::setEnemiesPath() {
     std::string enemiesPath;
     std::cout << "ingrese el camino del csv de enemigos:" << std::endl;
     // std::cin >> enemiesPath;
-    enemiesPath = "/home/pbn/tarea3pbn/enemigos.csv";
+    enemiesPath = "/home/pbn/tarea3/enemigos.csv";
 
     this->enemiesPath = enemiesPath;
 }
@@ -41,7 +41,7 @@ Mazmorra Juego::elegirMazmorra() {
 
     Otros otros;
     bool opcionValida = false;
-    std::vector<Mazmorra> mazmorras = otros.cargarMazmorrasCSV("/home/pbn/tarea3pbn/mazmorras.csv").first;
+    std::vector<Mazmorra> mazmorras = otros.cargarMazmorrasCSV("/home/pbn/tarea3/mazmorras.csv").first;
     std::cout << "=== Selección de Mazmorras ===" << std::endl;
     for (size_t i = 0; i < mazmorras.size(); ++i) {
         std::cout << "Mazmorras #" << i + 1 << ": " << mazmorras[i].getFilas() << "x" << mazmorras[i].getColumnas() << std::endl;
@@ -92,6 +92,7 @@ void mostrarInstrucciones() {
     std::cout << "d = cambiar direccion" << std::endl;
     std::cout << "z = usar habilidad" << std::endl;
     std::cout << "i = interactuar" << std::endl;
+    std::cout << "e = mostrar inventario" << std::endl;
     std::cout << "a = atacar" << std::endl;
     std::cout << "b = usar bomba" << std::endl;
     std::cout << "p = salir del juego" << std::endl;
@@ -105,6 +106,7 @@ void mostrarEstado(Jugador& jugador) {
     std::cout << "Dirección: " << jugador.getDireccion() << std::endl;
     std::cout << "==============" << std::endl;
 }
+
 
 int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
     int contador = 0;  
@@ -128,7 +130,7 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
             std::pair<int, int> futuraPos = mazmorraElegida.dondeSeMueveJugador(jugador);
             std::cout << "Futura posición: (" << futuraPos.first << ", " << futuraPos.second << ")" << std::endl;
 
-            if (jugador.puedeMoverse(mazmorraElegida, futuraPos.first, futuraPos.second)) {
+            if (jugador.puedeMoverse(mazmorraElegida, futuraPos.first, futuraPos.second) && mazmorraElegida.obtenerElemento(futuraPos.first, futuraPos.second) == '-') {
                 mazmorraElegida.modificarElemento(jugador.getY(), jugador.getX(), '-');
                 jugador.mover();
                 mazmorraElegida.modificarElemento(jugador.getY(), jugador.getX(), 'L');
@@ -160,12 +162,22 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
             if (elemento == 'C' || elemento == 'c') {
                 std::cout << "Abriendo cofre..." << std::endl;
                 jugador.abrirCofre(mazmorraElegida); // o seria mejor usar mazmorraElegida.abrirCofre()?
+                mazmorraElegida.modificarElemento(elementoXY.second, elementoXY.first, '-');
+                jugador.incrementarLlaves();
                 std::cout << "Cofre abierto!" << std::endl;
+
+            } else if (elemento == 'K' || elemento == 'k') {
+                std::cout <<  "abriendo cofre de jefe..." << std::endl;
+                jugador.abrirCofre(mazmorraElegida); // o seria mejor usar mazmorraElegida.abrirCofre()?
+                mazmorraElegida.modificarElemento(elementoXY.second, elementoXY.first, '-');
+                jugador.incrementarLlavesJefe();
+                std::cout << "Cofre de jefe abierto!" << std::endl;
+
             } else if ((elemento == 'p' || elemento == 'P') && jugador.getLlaves() > 0) {
                 std::cout << "Abriendo puerta..." << std::endl;
                 jugador.abrirPuerta(); //o seria mejor usar mazmorraElegida.abrirPuerta()?
                 jugador.usarLlave();
-                mazmorraElegida.modificarElemento(elementoXY.first, elementoXY.second, '-');
+                mazmorraElegida.modificarElemento(elementoXY.second, elementoXY.first, '-');
                 std::cout << "Puerta abierta!" << std::endl;
             } else if ((elemento == 'y' || elemento == 'Y') && jugador.getLlavesJefe() > 0) {
                 std::cout << "Abriendo puerta del jefe..." << std::endl;
@@ -200,6 +212,12 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
         case 'p': {
             std::cout << "Saliendo del juego..." << std::endl;
             return 0;
+        }
+
+        case 'e': {
+            std::cout << "Mostrando inventario..." << std::endl;
+            jugador.mostrarInventario();
+            break;
         }
 
         default:

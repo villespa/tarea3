@@ -173,3 +173,22 @@ void Jugador::entrarSalaJefe() {
     enSalaJefe = true;
     std::cout << "Link entra a la sala del jefe!" << std::endl;
 }
+
+
+void Jugador::incrementarLlaves() {
+    llaves++;
+}
+
+void Jugador::incrementarLlavesJefe() {
+    llavesJefe++;
+}
+
+void Jugador::mostrarInventario() {
+    std::cout << "=== INVENTARIO ===" << std::endl;
+    std::cout << "Vida: " << vida << std::endl;
+    std::cout << "Llaves: " << llaves << std::endl;
+    std::cout << "Llaves de Jefe: " << llavesJefe << std::endl;
+    std::cout << "Bombas: " << numBombas << std::endl;
+    std::cout << "Cofres abiertos: " << cofresAbiertos << std::endl;
+    std::cout << "Puertas abiertas: " << puertasAbiertas << std::endl;
+}

@@ -63,6 +63,9 @@ public:
     void abrirPuerta();
     void entrarSalaJefe();
     void usarLlaveJefe();
+    void incrementarLlaves();
+    void incrementarLlavesJefe();
+    void mostrarInventario();
 
 
 };
