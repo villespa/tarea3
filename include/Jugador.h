@@ -1,0 +1,70 @@
+#ifndef JUGADOR_H
+#define JUGADOR_H
+
+#include<iostream>
+#include<string>
+class Mazmorra;
+
+class Jugador
+{
+    int x;
+    int y;
+    int vida = 100;
+    int dano = 20;
+    int rango = 1;
+    std::string habilidad;
+    std::string direccion;
+    bool recibiendoDano;
+    int llaves;
+    int llavesJefe;
+    int pasos;
+    int cofresAbiertos;
+    int puertasAbiertas;
+    int EnemigosDerrotados;
+    int numBombas = 3;
+    bool usandoHabilidad;
+    bool atacando;
+    bool enSalaJefe;
+    bool haGanado;
+
+public:
+    //constructores
+    Jugador();
+    Jugador(int x, int y);
+    
+
+    //setters
+    void setX(int x);
+    void setY(int y);
+    void cambiarVida(int vida);
+    void setDireccion();
+
+    //getters
+    int getX();
+    int getY();
+    int getVida();
+    int getLlaves();
+    int getLlavesJefe();
+    int getPasos();
+    int getCofresAbiertos();
+    int getPuertasAbiertas();
+    std::string getDireccion();
+    int getNumBombas();
+
+    //acciones
+    void mover();
+    bool puedeMoverse(Mazmorra& mazmorra, int nuevoX, int nuevoY);
+    void usarLlave();
+    void usarBomba(Mazmorra& mazmorra);
+    void usarHabilidad();
+    void atacar();
+    void recibirDano(int dano);
+    void abrirCofre(Mazmorra& mazmorra);
+    void abrirPuerta();
+    void entrarSalaJefe();
+    void usarLlaveJefe();
+
+
+};
+
+#endif

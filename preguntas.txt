@@ -1,0 +1,6 @@
+Hay que implementar input para que el usuario escriva el camino a los csv's?
+
+Es necesario usar try-catch para evitar crasheos?
+
+Se va a probar con mapas invalidos y tenemos que verificar que son invalidos?
+
