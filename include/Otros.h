@@ -24,6 +24,8 @@ public:
     
     void mostrarMazmorras(std::vector<Mazmorra> mazmorras);
 
+    std::pair<std::vector<Enemigo>, Boss> cargarEnemigosMazmorraElegidaCSV(long unsigned int seleccionMazmorra);
+
 };
 
 #endif

@@ -58,7 +58,6 @@ public:
     void usarBomba(Mazmorra& mazmorra);
     void usarHabilidad();
     void atacar();
-    void recibirDano(int dano);
     void abrirCofre(Mazmorra& mazmorra);
     void abrirPuerta();
     void entrarSalaJefe();

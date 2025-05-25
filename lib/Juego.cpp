@@ -72,7 +72,7 @@ std::pair<Jugador, Mazmorra> Juego::iniciarJuego() {
     Otros otros;
 
     std::cout << "Bienvenido al juego!" << std::endl;
-    std::cout << "Jugador creado en la posición inicial (0, 0)." << std::endl;
+    //std::cout << "Jugador creado en la posición inicial (0, 0)." << std::endl;
 
     otros.mostrarMazmorras(otros.cargarMazmorrasCSV(this -> getDungeonsPath()).first);
 
@@ -80,6 +80,8 @@ std::pair<Jugador, Mazmorra> Juego::iniciarJuego() {
     std::vector<Mazmorra> vectorMazmorras = otros.cargarMazmorrasCSV("/home/pbn/tarea3/mazmorras.csv").first;
 
     SalaJefe salaJefeElegida = otros.cargarMazmorrasCSV("/home/pbn/tarea3/mazmorras.csv").second[this -> getSeleccionMazmorra() - 1];
+
+    std::pair<std::vector<Enemigo>, std::vector<Boss>> enemigosYJefes = otros.cargarEnemigosCSV("/home/pbn/tarea3/enemigos.csv");
 
     mazmorraElegida.mostrarMapa();
 

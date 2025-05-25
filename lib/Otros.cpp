@@ -9,8 +9,13 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include <iomanip>
-#include "Otros.h"
+//#include <iomanip>
+
+bool esString(std::stringstream& ss) {
+    std::string valor;
+    std::getline(ss, valor, ',');
+    return !valor.empty() && !std::isdigit(valor[0]);
+}
 
 std::pair<std::vector<Mazmorra>, std::vector<SalaJefe>> Otros::cargarMazmorrasCSV(const std::string& path) {
     // Cargar mazmorras desde un archivo CSV
@@ -181,7 +186,7 @@ std::pair<std::vector<Enemigo>, std::vector<Boss>> Otros::cargarEnemigosCSV(cons
         std::stringstream ss(linea);
         std::string valor;
         numLinea++;
-        std::cout << "\n=== Procesando enemigo #" << numLinea << " ===\n" << std::endl;
+        std::cout << "\n=== Procesando enemigos de mazmorra #" << numLinea << " ===\n" << std::endl;
 
         
         
@@ -235,7 +240,7 @@ std::pair<std::vector<Enemigo>, std::vector<Boss>> Otros::cargarEnemigosCSV(cons
         std::cout << "Frecuencia de ataque: " << frecuenciaAtaque << std::endl;
         
         // Crear el enemigo y agregarlo al vector
-        Enemigo enemigo(x, y, patronMovimiento, vida, dano, rango, frecuenciaAtaque);
+        Enemigo enemigo(x, y, patronMovimiento, vida, dano, rango, frecuenciaAtaque, numMovimientos);
         enemigos.push_back(enemigo);
         std::cout << "Enemigo creado y agregado a la lista." << std::endl;
     }
@@ -260,4 +265,120 @@ void Otros::mostrarMazmorras(std::vector<Mazmorra> mazmorras)
         std::cout << std::endl;
 
     }
+}
+
+
+std::pair<std::vector<Enemigo>, Boss> Otros::cargarEnemigosMazmorraElegidaCSV(long unsigned int seleccionMazmorra) {
+    std::vector<Enemigo> enemigos;
+    Boss jefe;
+    std::ifstream archivo("/home/pbn/tarea3/enemigos.csv");
+    
+    if (!archivo.is_open()) {
+        std::cerr << "Error al abrir el archivo: " << "/home/pbn/tarea3/enemigos.csv" << std::endl;
+        return std::make_pair(enemigos, jefe);
+    }
+    
+    std::string linea;
+    int numLinea = 0;
+
+    while (std::getline(archivo, linea)) {
+        numLinea++;
+        if (numLinea == seleccionMazmorra) {
+
+            std::string valor;
+            std::stringstream ss(linea);
+            while (esString(ss)) { // aqui quiero salir del loop cuando entre comas hay un string y no un char
+                std::string valorPeek;
+                std::getline(ss, valorPeek, ',');
+
+                std::cout << "\n=== Procesando enemigos de mazmorra #" << seleccionMazmorra << " ===\n" << std::endl;    
+
+                int x, y, vida, dano, frecuenciaAtaque, numMovimientos = 0;
+                int rangoAtaque = 0;
+
+                std::vector<std::pair<int,int>> patronMovimiento;
+                
+                // Leer las propiedades de enemigos
+                std::getline(ss, valor, ',');
+                y = std::stoi(valor);
+                
+                std::getline(ss, valor, ',');
+                x = std::stoi(valor);
+
+                std::getline(ss, valor, ',');
+                numMovimientos = std::stoi(valor);
+
+                for (int i = 0; i < numMovimientos; i++) {
+                    int xMovimiento, yMovimiento;
+                    std::getline(ss, valor, ',');
+                    yMovimiento = std::stoi(valor);
+                    
+                    std::getline(ss, valor, ',');
+                    xMovimiento = std::stoi(valor);
+                    
+                    patronMovimiento.push_back(std::make_pair(yMovimiento, xMovimiento));
+                }
+
+                std::getline(ss, valor, ',');
+                vida = std::stoi(valor);
+                
+                std::getline(ss, valor, ',');
+                dano = std::stoi(valor);
+                
+                std::getline(ss, valor, ',');
+                rangoAtaque = std::stoi(valor);
+
+                std::getline(ss, valor, ',');
+                frecuenciaAtaque = std::stoi(valor);
+                
+                // Crear el enemigo con el constructor y agregarlo al vector
+                Enemigo enemigo(x, y, patronMovimiento, vida, dano, rangoAtaque, frecuenciaAtaque, numMovimientos);
+            }
+            // Leer el jefe
+
+            std::string nombreJefe;
+            int yJefe, xJefe, numMovimientosJefe, vidaJefe, danoJefe, rangoJefe, frecuenciaAtaqueJefe;
+            std::vector<std::pair<int,int>> patronMovimientoJefe;
+
+            std::getline(ss, valor, ',');
+            nombreJefe = valor;
+
+            std::getline(ss, valor, ',');
+            yJefe = std::stoi(valor);
+
+            std::getline(ss, valor, ',');
+            xJefe = std::stoi(valor);
+        
+            std::getline(ss, valor, ',');
+            numMovimientosJefe = std::stoi(valor);
+
+            for (int i = 0; i < numMovimientosJefe; i++) {
+                int xMovimiento, yMovimiento;
+                std::getline(ss, valor, ',');
+                yMovimiento = std::stoi(valor);
+                
+                std::getline(ss, valor, ',');
+                xMovimiento = std::stoi(valor);
+                
+                patronMovimientoJefe.push_back(std::make_pair(yMovimiento, xMovimiento));
+            }
+
+            std::getline(ss, valor, ',');
+            vidaJefe = std::stoi(valor);
+
+            std::getline(ss, valor, ',');
+            danoJefe = std::stoi(valor);
+
+            std::getline(ss, valor, ',');
+            rangoJefe = std::stoi(valor);
+
+            std::getline(ss, valor, ',');
+            frecuenciaAtaqueJefe = std::stoi(valor);
+
+            // Crear el jefe con el constructor
+            jefe = Boss(xJefe, yJefe, patronMovimientoJefe, vidaJefe, danoJefe, rangoJefe, frecuenciaAtaqueJefe, nombreJefe);
+
+
+
+        }
 }
