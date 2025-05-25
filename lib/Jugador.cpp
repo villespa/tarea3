@@ -200,3 +200,78 @@ void Jugador::mostrarInventario() {
     std::cout << "Cofres abiertos: " << cofresAbiertos << std::endl;
     std::cout << "Puertas abiertas: " << puertasAbiertas << std::endl;
 }
+
+
+void Jugador::atacarEnemigos(Mazmorra& mazmorra) {
+    atacando = true;
+    std::cout << "Link ataca con su espada!" << std::endl;
+    
+    // Calcular posición de ataque según la dirección
+    int ataqueX = x;
+    int ataqueY = y;
+    
+    if (direccion == "arriba") {
+        ataqueY--;
+    } else if (direccion == "abajo") {
+        ataqueY++;
+    } else if (direccion == "izquierda") {
+        ataqueX--;
+    } else if (direccion == "derecha") {
+        ataqueX++;
+    }
+    
+    // Verificar si hay un enemigo en la posición de ataque
+    char elemento = mazmorra.obtenerElemento(ataqueX, ataqueY);
+    if (elemento == 'E' || elemento == 'J') {
+        std::cout << "¡Golpe conectado! Enemigo recibe " << dano << " de daño." << std::endl;
+        
+        // implementar enemigos con su clase
+        // Enemigo enemigo = mazmorra.obtenerEnemigo(ataqueX, ataqueY);
+
+    } else {
+        std::cout << "El ataque no conectó con ningún enemigo." << std::endl;
+    }
+}
+
+
+bool Jugador::estaEnRango(int enemigoX, int enemigoY, int rangoEnemigo) {
+    int distanciaX = abs(x - enemigoX);
+    int distanciaY = abs(y - enemigoY);
+    
+    // Para un rango cuadrado (ejemplo: rango 3 = área 3x3)
+    int rangoMax = (rangoEnemigo - 1) / 2;
+    
+    return (distanciaX <= rangoMax && distanciaY <= rangoMax);
+}
+
+
+void Jugador::recibirDano(int danoRecibido) {
+    vida -= danoRecibido;
+    recibiendoDano = true;
+    std::cout << "Recibes " << danoRecibido << " de daño" << std::endl;
+    
+    if (vida <= 0) {
+        vida = 0;
+        std::cout << "Te mueres" << std::endl;
+    }
+}
+
+int Jugador::getDano() const {
+    return dano;
+}
+
+int Jugador::getRango() const {
+    return rango;
+}
+
+bool Jugador::estaAtacando() const {
+    return atacando;
+}
+
+void Jugador::setAtacando(bool estado) {
+    atacando = estado;
+}
+
+void Jugador::setRecibiendoDano(bool estado) {
+    recibiendoDano = estado;
+}

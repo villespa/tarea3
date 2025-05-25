@@ -68,6 +68,22 @@ public:
     void mostrarInventario();
 
 
+
+    // Métodos de combate
+    void atacarEnemigos(Mazmorra& mazmorra);
+    bool estaEnRango(int enemigoX, int enemigoY, int rango);
+    void recibirDano(int dano);
+    
+    // Getters adicionales para combate
+    int getDano() const;
+    int getRango() const;
+    bool estaAtacando() const;
+    
+    // Setters para estados
+    void setAtacando(bool estado);
+    void setRecibiendoDano(bool estado);
+
+
 };
 
 #endif
