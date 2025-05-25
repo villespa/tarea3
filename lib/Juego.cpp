@@ -81,7 +81,8 @@ std::pair<Jugador, Mazmorra> Juego::iniciarJuego() {
 
     SalaJefe salaJefeElegida = otros.cargarMazmorrasCSV("/home/pbn/tarea3/mazmorras.csv").second[this -> getSeleccionMazmorra() - 1];
 
-    std::pair<std::vector<Enemigo>, std::vector<Boss>> enemigosYJefes = otros.cargarEnemigosCSV("/home/pbn/tarea3/enemigos.csv");
+    //std::pair<std::vector<Enemigo>, std::vector<Boss>> enemigosYJefes = otros.cargarEnemigosCSV("/home/pbn/tarea3/enemigos.csv");
+    std::pair<std::vector<Enemigo>, Boss> enemigosYJefes = otros.cargarEnemigosMazmorraElegidaCSV(this -> getSeleccionMazmorra() - 1, getEnemiesPath());
 
     mazmorraElegida.mostrarMapa();
 
