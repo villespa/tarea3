@@ -406,7 +406,7 @@ std::pair<std::vector<Enemigo>, Boss> Otros::cargarEnemigosMazmorraElegidaCSV(lo
 
                     // Crear el jefe
                     jefe = Boss(xJefe, yJefe, patronMovimientoJefe, vidaJefe, danoJefe, rangoJefe, frecuenciaAtaqueJefe, nombreJefe);
-                    std::cout << "👑 Jefe " << nombreJefe << " creado exitosamente!" << std::endl;
+                    std::cout << "Jefe " << nombreJefe << " creado exitosamente!" << std::endl;
                     
 
                 }
