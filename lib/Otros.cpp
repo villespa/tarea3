@@ -279,7 +279,7 @@ std::pair<std::vector<Enemigo>, Boss> Otros::cargarEnemigosMazmorraElegidaCSV(lo
     }
     
     std::string linea;
-    int numLinea = 0;
+    long unsigned int numLinea = 0;
 
     while (std::getline(archivo, linea)) {
         numLinea++;
@@ -381,4 +381,5 @@ std::pair<std::vector<Enemigo>, Boss> Otros::cargarEnemigosMazmorraElegidaCSV(lo
 
 
         }
+    }
 }

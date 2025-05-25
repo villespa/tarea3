@@ -34,9 +34,7 @@ public:
     std::string getNombreJefe() const { return nombreJefe; }
 
     // Constructors
-    Boss() : x(0), y(0), vida(100), dano(20), rango(1), frecuenciaAtaque(0),
-        patronMovimiento(), pasoActual(0), atacando(false), xOriginal(0), yOriginal(0),
-        recibiendoDano(false), turnosDesdeUltimoAtaque(0) {}
+    Boss(); // Constructor por defecto
     Boss(int x, int y, std::vector<std::pair<int, int>> patronMovimiento, int vida, int dano, int rango, int frecuenciaAtaque, const std::string& nombreJefe);
 
     // Métodos adicionales
