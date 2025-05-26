@@ -111,7 +111,32 @@ void mostrarEstado(Jugador& jugador) {
 }
 
 
+void Juego::recibirDanoEnRango(Jugador& jugador, std::vector<Enemigo>& enemigos) {
+
+    for (long unsigned int i = 0; i < enemigos.size(); i++) {
+
+        if (enemigos[i].getVida() <= 0) {
+            continue; // Continuar al siguiente enemigo
+        }
+
+        if (jugador.estaEnRango(enemigos[i])) {
+            std::cout << "Enemigo en rango, te ataca!" << std::endl;
+            std::cout << "   Posición: (" << enemigos[i].getX() << ", " << enemigos[i].getY() << ")" << std::endl;
+            std::cout << "   Vida: " << enemigos[i].getVida() << std::endl;
+            std::cout << "   Rango: " << enemigos[i].getRango() << std::endl;
+            enemigos[i].atacar(jugador);
+    
+    
+        }
+    }
+}
+
+
 int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
+    Otros otros;
+
+    std::pair<std::vector<Enemigo>, Boss> enemigosYJefes = otros.cargarEnemigosMazmorraElegidaCSV(this -> getSeleccionMazmorra() - 1, getEnemiesPath());
+
     int contador = 0;  
 
     std::pair<int, int> posicionDeL = mazmorraElegida.posicionInicialJugador();
@@ -121,6 +146,10 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
     while (jugador.getVida() > 0 && mazmorraElegida.getColumnas() > 0) {
         mostrarInstrucciones();
         char instruccion;
+
+        recibirDanoEnRango(jugador, enemigosYJefes.first);
+
+
         mostrarEstado(jugador);
         mazmorraElegida.mostrarMapa();
         std::cout << "Ingrese una instrucción: ";
@@ -199,7 +228,24 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
 
         case 'a': {
             std::cout << "Atacando..." << std::endl;
-            jugador.atacar();
+            if (mazmorraElegida.obtenerElemento(mazmorraElegida.dondeSeMueveJugador(jugador).first, mazmorraElegida.dondeSeMueveJugador(jugador).second) == 'E') {
+                jugador.atacarEnemigos(mazmorraElegida, enemigosYJefes.first);
+            }
+            else if (mazmorraElegida.obtenerElemento(mazmorraElegida.dondeSeMueveJugador(jugador).first, mazmorraElegida.dondeSeMueveJugador(jugador).second) == 'K') {
+                std::cout << "¡Has encontrado al jefe!" << std::endl;
+                jugador.entrarSalaJefe();
+            }
+            else {
+                std::cout << "No hay enemigos en esta posición." << std::endl;
+            }
+
+            for (long unsigned int i = 0; i < enemigosYJefes.first.size(); i++) {
+                if (enemigosYJefes.first[i].getVida() <= 0) {
+                    std::cout << "Enemigo derrotado!" << std::endl;
+                    mazmorraElegida.modificarElemento(enemigosYJefes.first[i].getY(), enemigosYJefes.first[i].getX(), '-');
+                    break;
+                }
+            }
             break;
         }
 
@@ -238,3 +284,4 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
 
     return 0;
 }
+

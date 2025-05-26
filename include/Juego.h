@@ -26,6 +26,8 @@ class Juego
 
 public:
 
+    void recibirDanoEnRango(Jugador& jugador, std::vector<Enemigo>& enemigos);
+
     Mazmorra  elegirMazmorra();
     void mostrarMazmorras(int numMazmorra);
     int elegirHabilidad();

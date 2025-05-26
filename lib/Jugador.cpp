@@ -130,9 +130,9 @@ void Jugador::mover() {
 
 
 bool Jugador::puedeMoverse(Mazmorra& mazmorra, int nuevoX, int nuevoY) {
-    if (nuevoX < 0 || nuevoX >= mazmorra.getFilas() || nuevoY < 0 || nuevoY >= mazmorra.getColumnas()) {
-        return false;
-    }
+    //if (nuevoX < 0 || nuevoX >= mazmorra.getFilas() || nuevoY < 0 || nuevoY >= mazmorra.getColumnas()) {
+    //    return false;
+    //}
 
 
 
@@ -202,7 +202,7 @@ void Jugador::mostrarInventario() {
 }
 
 
-void Jugador::atacarEnemigos(Mazmorra& mazmorra) {
+void Jugador::atacarEnemigos(Mazmorra& mazmorra, std::vector<Enemigo>& enemigos) {
     atacando = true;
     std::cout << "Link ataca con su espada!" << std::endl;
     
@@ -219,29 +219,43 @@ void Jugador::atacarEnemigos(Mazmorra& mazmorra) {
     } else if (direccion == "derecha") {
         ataqueX++;
     }
+
     
     // Verificar si hay un enemigo en la posición de ataque
     char elemento = mazmorra.obtenerElemento(ataqueX, ataqueY);
     if (elemento == 'E' || elemento == 'J') {
         std::cout << "¡Golpe conectado! Enemigo recibe " << dano << " de daño." << std::endl;
-        
-        // implementar enemigos con su clase
-        // Enemigo enemigo = mazmorra.obtenerEnemigo(ataqueX, ataqueY);
-
+        for (long unsigned int i = 0; i < enemigos.size(); i++) {
+            if (enemigos[i].getX() == ataqueX && enemigos[i].getY() == ataqueY) {
+                std::cout << "Enemigo encontrado en la posición (" << ataqueX << ", " << ataqueY << ")." << std::endl;
+                std::cout << "Vida del enemigo antes del ataque: " << enemigos[i].getVida() << std::endl;
+                enemigos[i].recibirDano(dano);
+                std::cout << "Vida del enemigo después del ataque: " << enemigos[i].getVida() << std::endl;
+                if (enemigos[i].getVida() <= 0) {
+                    EnemigosDerrotados++;
+                    std::cout << "Enemigo derrotado!" << std::endl;
+                }
+            
+                break; // Salir del bucle una vez que se ha encontrado y atacado al enemigo
+            }
+        }
     } else {
         std::cout << "El ataque no conectó con ningún enemigo." << std::endl;
     }
 }
 
 
-bool Jugador::estaEnRango(int enemigoX, int enemigoY, int rangoEnemigo) {
-    int distanciaX = abs(x - enemigoX);
-    int distanciaY = abs(y - enemigoY);
+bool Jugador::estaEnRango(Enemigo& enemigo) {
+    int distanciaX = abs(x - enemigo.getX());
+    int distanciaY = abs(y - enemigo.getY());
     
     // Para un rango cuadrado (ejemplo: rango 3 = área 3x3)
-    int rangoMax = (rangoEnemigo - 1) / 2;
+    int rangoMax = (enemigo.getRango() - 1) / 2;
+
+    bool rangoX = distanciaX <= rangoMax;
+    bool rangoY= distanciaY <= rangoMax;
     
-    return (distanciaX <= rangoMax && distanciaY <= rangoMax);
+    return (rangoX && rangoY); // El jugador puede atacar al enemigo si está dentro del rango
 }
 
 

@@ -3,7 +3,9 @@
 
 #include<iostream>
 #include<string>
+#include<vector>
 class Mazmorra;
+class Enemigo;
 
 class Jugador
 {
@@ -69,8 +71,8 @@ public:
 
 
     // Métodos de combate
-    void atacarEnemigos(Mazmorra& mazmorra);
-    bool estaEnRango(int enemigoX, int enemigoY, int rango);
+    void atacarEnemigos(Mazmorra& mazmorra, std::vector<Enemigo>& enemigos);
+    bool estaEnRango(Enemigo& enemigo);
     void recibirDano(int dano);
     
     // Getters adicionales para combate

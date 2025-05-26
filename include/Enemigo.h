@@ -4,6 +4,7 @@
 #include<iostream>
 #include<string>
 #include<vector>
+#include "Jugador.h"
 
 class Enemigo{
     int x;
@@ -21,6 +22,7 @@ class Enemigo{
     bool recibiendoDano;
     int turnosDesdeUltimoAtaque;
 
+
 public:
     int getX();
     int getY();
@@ -34,6 +36,11 @@ public:
         recibiendoDano(false), turnosDesdeUltimoAtaque(0) {};
 
     Enemigo(int x, int y, std::vector<std::pair<int,int>> patronMovimeiento, int vida, int dano, int rango, int frecuenciaAtaque, int numMovimientos);
+
+    void recibirDano(int danoRecibido);
+    
+    void atacar(Jugador& jugador);
+
 };
 
 #endif

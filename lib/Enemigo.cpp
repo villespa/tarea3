@@ -1,4 +1,7 @@
 #include "../include/Enemigo.h"
+#include "../include/Jugador.h"
+#include <iostream>
+#include <vector>
 
 int Enemigo::getX()  { return x; }
 int Enemigo::getY() { return y; }
@@ -22,6 +25,19 @@ Enemigo::Enemigo(int x, int y, std::vector<std::pair<int,int>> patronMovimeiento
     yOriginal = y;
     recibiendoDano = false;
     turnosDesdeUltimoAtaque = 0;
+}
+
+void Enemigo::recibirDano(int danoRecibido) {
+    vida -= danoRecibido;
+    recibiendoDano = true;
+    std::cout << "Enemigo recibe " << danoRecibido << " de daño" << std::endl;
+
+}
+
+void Enemigo::atacar(Jugador& jugador) {
+    int damo = getDano();
+    jugador.recibirDano(damo);
+
 }
 
 

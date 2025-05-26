@@ -32,52 +32,30 @@ std::pair<std::vector<Mazmorra>, std::vector<SalaJefe>> Otros::cargarMazmorrasCS
     
     while (std::getline(archivo, linea)) {
         numLinea++;
-        //std::cout << "\n=== MAZMORRA #" << numLinea << " ===\n" << std::endl;
         
         std::stringstream ss(linea);
         std::string valor;
         
-        // Añadir una nueva instancia de SalaJefe al vector
         salasJefes.push_back(SalaJefe());
         
-        // Leer filas y columnas de la mazmorra principal
         int filas, columnas;
         std::getline(ss, valor, ',');
-        //std::cout << "Filas de la mazmorra: " << valor << std::endl;
         filas = std::stoi(valor);
         
         std::getline(ss, valor, ',');
-        //std::cout << "Columnas de la mazmorra: " << valor << std::endl;
         columnas = std::stoi(valor);
         
         // Crear una matriz para el mapa
         std::vector<std::vector<char>> mapa(filas, std::vector<char>(columnas));
         
-        //std::cout << "\nMapa de la mazmorra principal:" << std::endl;
         
-        // // Imprimir cabecera de columnas
-        // //std::cout << "    ";
-        // for (int j = 0; j < columnas; j++) {
-        //     //std::cout << std::setw(2) << j << " ";
-        // }
-        // //std::cout << std::endl;
-        
-        // // Imprimir línea separadora
-        // //std::cout << "   ";
-        // for (int j = 0; j < columnas; j++) {
-        //     //std::cout << "---";
-        // }
-        // //std::cout << std::endl;
         
         // Leer e imprimir el mapa
         for (int i = 0; i < filas; i++) {
-            // Imprimir número de fila
-            //std::cout << std::setw(2) << i << " |";
             
             for (int j = 0; j < columnas; j++) {
                 std::getline(ss, valor, ',');
                 mapa[i][j] = valor[0];
-                //std::cout << " " << mapa[i][j] << " ";
             
 
                 // Si encontramos una entrada al jefe
@@ -86,19 +64,9 @@ std::pair<std::vector<Mazmorra>, std::vector<SalaJefe>> Otros::cargarMazmorrasCS
                 }
             }
 
-            // Salto de línea al final de cada fila
-            //std::cout << std::endl;
         }
 
 
-        // // Mostrar entradas encontradas
-        // for (int i = 0; i < filas; i++) {
-        //     for (int j = 0; j < columnas; j++) {
-        //         if (mapa[i][j] == 'E') {
-        //             //std::cout << "Entrada al jefe en [" << i << ", " << j << "]" << std::endl;
-        //         }
-        //     }
-        // }
         
         // Leer dimensiones de la sala del jefe
         std::getline(ss, valor, ',');
@@ -113,33 +81,15 @@ std::pair<std::vector<Mazmorra>, std::vector<SalaJefe>> Otros::cargarMazmorrasCS
         salasJefes[numLinea-1].mapa.resize(salasJefes[numLinea-1].getFilas(), 
                                          std::vector<char>(salasJefes[numLinea-1].getColumnas()));
         
-        //std::cout << "\nMapa de la sala del jefe:" << std::endl;
-        
-        // Imprimir cabecera de columnas para la sala del jefe
-        //std::cout << "    ";
-        // for (int j = 0; j < salasJefes[numLinea-1].getColumnas(); j++) {
-        //     //std::cout << std::setw(2) << j << " ";
-        // }
-        // //std::cout << std::endl;
-        
-        // // Imprimir línea separadora
-        // //std::cout << "   ";
-        // for (int j = 0; j < salasJefes[numLinea-1].getColumnas(); j++) {
-        //     //std::cout << "---";
-        // }
-        // //std::cout << std::endl;
         
         // Leer e imprimir el mapa de la sala del jefe
         for (int i = 0; i < salasJefes[numLinea-1].getFilas(); i++) {
-            // Imprimir número de fila
-            //std::cout << std::setw(2) << i << " |";
             
             for (int j = 0; j < salasJefes[numLinea-1].getColumnas(); j++) {
                 std::getline(ss, valor, ',');
                 salasJefes[numLinea-1].mapa[i][j] = valor[0];
                 //std::cout << " " << salasJefes[numLinea-1].mapa[i][j] << " ";
             }
-            // Salto de línea al final de cada fila
             //std::cout << std::endl;
         }
         
@@ -150,16 +100,11 @@ std::pair<std::vector<Mazmorra>, std::vector<SalaJefe>> Otros::cargarMazmorrasCS
         // Agregar la mazmorra al vector
         mazmorras.push_back(mazmorra);
         
-        //std::cout << "\n--- Mazmorra #" << numLinea << " procesada ---" << std::endl;
     }
     
     if (mazmorras.empty()) {
         std::cerr << "No se encontraron mazmorras en el archivo: " << path << std::endl;
     } 
-    // else {
-    //     std::cout << "\nMazmorras cargadas correctamente desde: " << path << std::endl;
-    //     std::cout << "Total de mazmorras cargadas: " << mazmorras.size() << std::endl;
-    // }
     archivo.close();
     return std::make_pair(mazmorras, salasJefes);
 }
