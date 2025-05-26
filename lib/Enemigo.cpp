@@ -35,9 +35,25 @@ void Enemigo::recibirDano(int danoRecibido) {
 }
 
 void Enemigo::atacar(Jugador& jugador) {
+
+    subirTurnosDesdeUltimoAtaque();
+
+
+    if (turnosDesdeUltimoAtaque < frecuenciaAtaque) {
+        std::cout << "El enemigo no puede atacar aún, debe esperar " << frecuenciaAtaque - turnosDesdeUltimoAtaque << " turnos." << std::endl;
+        return;
+    }
+
     int damo = getDano();
     jugador.recibirDano(damo);
+    resetearTurnosDesdeUltimoAtaque();
 
 }
 
+void Enemigo::subirTurnosDesdeUltimoAtaque() {
+    turnosDesdeUltimoAtaque++;
+}
 
+void Enemigo::resetearTurnosDesdeUltimoAtaque() {
+    turnosDesdeUltimoAtaque = 0;
+}

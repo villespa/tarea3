@@ -41,6 +41,9 @@ public:
     
     void atacar(Jugador& jugador);
 
+    void subirTurnosDesdeUltimoAtaque();
+    void resetearTurnosDesdeUltimoAtaque();
+
 };
 
 #endif
