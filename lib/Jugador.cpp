@@ -107,7 +107,33 @@ void Jugador::setDireccion() {
     std::cout << "4. Derecha" << std::endl;
     std::cout << "Ingrese la dirección (1-4): ";
     int opcion;
-    std::cin >> opcion;
+
+    int opcionesValidas[] = {1,2,3,4};
+
+    try {
+        std::cin >> opcion;
+
+
+        bool encontrado = false;
+        for (int i = 0; i < 4; i++) {
+            if (opcionesValidas[i] == opcion) {
+                encontrado = true;
+                break;
+            }
+        }
+
+        if (!encontrado) {
+            throw std::invalid_argument("instruccion invalida");
+        }
+    }
+    catch (...) {
+        std::cout << "instruccion invalida" << std::endl;
+        std::cout << "Opciones válidas: 1, 2, 3, 4" << std::endl;
+        opcion = 1;
+    }
+
+
+
     switch (opcion) {
         case 1:
             direccion = "arriba";

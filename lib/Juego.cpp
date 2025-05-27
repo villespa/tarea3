@@ -187,7 +187,30 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
         mazmorraElegida.mostrarMapa();
         std::cout << "Ingrese una instrucción: ";
         std::cout << "turno # " << contador << std::endl;
-        std::cin >> instruccion;
+
+        char opcionesValidas[] = {'m', 'd', 'z', 'i', 'e', 'a', 'b', 'p'};
+        try {
+            std::cin >> instruccion;
+
+
+            bool encontrado = false;
+            for (int i = 0; i < 8; i++) {
+                if (opcionesValidas[i] == instruccion) {
+                    encontrado = true;
+                    break;
+                }
+            }
+
+            if (!encontrado) {
+                throw std::invalid_argument("instruccion invalida");
+            }
+        }
+        catch (...) {
+            std::cout << "instruccion invalida" << std::endl;
+            std::cout << "Opciones válidas: m, d, z, i, e, a, b, p" << std::endl;
+            continue;
+        }
+
         switch (instruccion) 
         {
         case 'm': {
@@ -362,7 +385,31 @@ int Juego::mainLoopSalaJefe(Jugador& jugador, SalaJefe& salaJefeElegida, Otros& 
         salaJefeElegida.mostrarMapa();
         std::cout << "Ingrese una instrucción: ";
         std::cout << "turno # " << contador << std::endl;
-        std::cin >> instruccion;
+
+        char opcionesValidas[] = {'m', 'd', 'z', 'i', 'e', 'a', 'b', 'p'};
+        int numOpciones = sizeof(opcionesValidas) / sizeof(opcionesValidas[0]);
+        try {
+            std::cin >> instruccion;
+
+
+            bool encontrado = false;
+            for (int i = 0; i < numOpciones; i++) {
+                if (opcionesValidas[i] == instruccion) {
+                    encontrado = true;
+                    break;
+                }
+            }
+
+            if (!encontrado) {
+                throw std::invalid_argument("instruccion invalida");
+            }
+        }
+        catch (...) {
+            std::cout << "instruccion invalida" << std::endl;
+            std::cout << "Opciones válidas: m, d, z, i, e, a, b, p" << std::endl;
+            continue;
+        }
+
         switch (instruccion) 
         {
         case 'm': {
