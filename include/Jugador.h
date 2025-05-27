@@ -56,6 +56,7 @@ public:
     int getEnemigosDerrotados();
 
     //acciones
+    void incrementarVida(int cantidad);
     void mover();
     bool puedeMoverse(Mazmorra& mazmorra, int nuevoX, int nuevoY);
     bool puedeMoverse(SalaJefe& mazmorra, int nuevoX, int nuevoY);

@@ -387,6 +387,10 @@ int Jugador::getDano() {
     return dano;
 }
 
+void Jugador::incrementarVida(int cantidad) {
+    vida+=cantidad;
+}
+
 int Jugador::getRango() {
     return rango;
 }

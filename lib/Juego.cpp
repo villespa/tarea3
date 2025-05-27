@@ -124,6 +124,8 @@ void Juego::recibirDanoEnRango(Jugador& jugador, std::vector<Enemigo>& enemigos)
             continue; // Continuar al siguiente enemigo
         }
 
+        enemigos[i].subirTurnosDesdeUltimoAtaque();
+
         if (jugador.estaEnRango(enemigos[i])) {
             std::cout << "Enemigo en rango, te ataca!" << std::endl;
             std::cout << "   Posición: (" << enemigos[i].getX() << ", " << enemigos[i].getY() << ")" << std::endl;
@@ -260,6 +262,7 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
             for (long unsigned int i = 0; i < enemigosYJefes.first.size(); i++) {
                 if (enemigosYJefes.first[i].getVida() <= 0) {
                     std::cout << "haz eliminado el enemigo" << std::endl;
+                    jugador.incrementarVida(20);
                     mazmorraElegida.modificarElemento(enemigosYJefes.first[i].getY(), enemigosYJefes.first[i].getX(), '-');
                     //mazmorraElegida.modificarElemento(enemigosYJefes.first[i].getX(), enemigosYJefes.first[i].getY(), '-');
                     enemigosYJefes.first.erase(enemigosYJefes.first.begin() + i);
@@ -423,13 +426,25 @@ int Juego::mainLoopSalaJefe(Jugador& jugador, SalaJefe& salaJefeElegida, Otros& 
         }
 
         case 'a': {
-            //std::cout << "Atacando..." << std::endl;
             if (salaJefeElegida.obtenerElemento(salaJefeElegida.dondeSeMueveJugador(jugador).first, salaJefeElegida.dondeSeMueveJugador(jugador).second) == 'E') {
+                std::cout << salaJefeElegida.dondeSeMueveJugador(jugador).first << std::endl;
+                std::cout << salaJefeElegida.dondeSeMueveJugador(jugador).second << std::endl;
+
                 jugador.atacarEnemigos(salaJefeElegida, enemigosActuales.first);
+                
+
+            for (long unsigned int i = 0; i < enemigosActuales.first.size(); i++) {
+                if (enemigosActuales.first[i].getVida() <= 0) {
+                    std::cout << "haz eliminado el enemigo" << std::endl;
+                    jugador.incrementarVida(20);
+                    salaJefeElegida.modificarElemento(enemigosActuales.first[i].getY(), enemigosActuales.first[i].getX(), '-');
+                    //mazmorraElegida.modificarElemento(enemigosYJefes.first[i].getX(), enemigosYJefes.first[i].getY(), '-');
+                    enemigosActuales.first.erase(enemigosActuales.first.begin() + i);
+
+                    break;
+                }
             }
-            else if (salaJefeElegida.obtenerElemento(salaJefeElegida.dondeSeMueveJugador(jugador).first, salaJefeElegida.dondeSeMueveJugador(jugador).second) == 'K') {
-                std::cout << "¡Has encontrado al jefe!" << std::endl;
-                jugador.entrarSalaJefe();
+
             }
             else {
                 std::cout << "No hay enemigos en esta posición." << std::endl;
@@ -439,12 +454,13 @@ int Juego::mainLoopSalaJefe(Jugador& jugador, SalaJefe& salaJefeElegida, Otros& 
                 if (enemigosActuales.first[i].getVida() <= 0) {
                     std::cout << "Enemigo derrotado!" << std::endl;
                     salaJefeElegida.modificarElemento(enemigosActuales.first[i].getY(), enemigosActuales.first[i].getX(), '-');
+                    //mazmorraElegida.modificarElemento(enemigosYJefes.first[i].getX(), enemigosYJefes.first[i].getY(), '-');
+
                     break;
                 }
             }
             break;
         }
-
         case 'b': {
             //std::cout << "Usando bomba..." << std::endl;
             if (jugador.getNumBombas() > 0) {
