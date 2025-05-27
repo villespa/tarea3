@@ -36,7 +36,7 @@ void Enemigo::recibirDano(int danoRecibido) {
 
 void Enemigo::atacar(Jugador& jugador) {
 
-    subirTurnosDesdeUltimoAtaque();
+    //subirTurnosDesdeUltimoAtaque();
 
 
     if (turnosDesdeUltimoAtaque < frecuenciaAtaque) {
@@ -47,6 +47,7 @@ void Enemigo::atacar(Jugador& jugador) {
     int damo = getDano();
     jugador.recibirDano(damo);
     resetearTurnosDesdeUltimoAtaque();
+    std::cout << "El enemigo te ataca por " << damo << " de dano" << std::endl;
 
 }
 
