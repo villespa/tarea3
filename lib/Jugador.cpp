@@ -226,11 +226,15 @@ void Jugador::atacarEnemigos(Mazmorra& mazmorra, std::vector<Enemigo>& enemigos)
     if (elemento == 'E' || elemento == 'J') {
         std::cout << "¡Golpe conectado! Enemigo recibe " << dano << " de daño." << std::endl;
         for (long unsigned int i = 0; i < enemigos.size(); i++) {
+            std::cout << i << std::endl;
             if (enemigos[i].getX() == ataqueX && enemigos[i].getY() == ataqueY) {
+
                 std::cout << "Enemigo encontrado en la posición (" << ataqueX << ", " << ataqueY << ")." << std::endl;
                 std::cout << "Vida del enemigo antes del ataque: " << enemigos[i].getVida() << std::endl;
                 enemigos[i].recibirDano(dano);
                 std::cout << "Vida del enemigo después del ataque: " << enemigos[i].getVida() << std::endl;
+                
+
                 if (enemigos[i].getVida() <= 0) {
                     EnemigosDerrotados++;
                     std::cout << "Enemigo derrotado!" << std::endl;

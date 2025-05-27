@@ -33,6 +33,8 @@ public:
     int elegirHabilidad();
     std::pair<Jugador, Mazmorra>  iniciarJuego();
     int mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida);    
+    int mainLoopSalaJefe(Jugador& jugador, SalaJefe& SalaJefeElegida, Otros& otros);
+    void recibirDanoEnRangoSalaJefe(Jugador& jugador, std::vector<Enemigo>& enemigos);
 
     // setters
 

@@ -2,10 +2,10 @@
 #include "../include/Jugador.h"
 
 Mazmorra::Mazmorra(int filas, int columnas, const std::vector<std::vector<char>>& mapa,
-                   const std::vector<Enemigo>& enemigos)
+                   std::vector<Enemigo>& enemigos)
     : filas(filas), columnas(columnas), mapa(mapa), enemigos(enemigos) {}
 
-void Mazmorra::mostrarMapa() const {
+void Mazmorra::mostrarMapa() {
     for (int i = 0; i < filas; ++i) {
         for (int j = 0; j < columnas; ++j) {
             char c = mapa[i][j];
@@ -38,11 +38,11 @@ void Mazmorra::modificarElemento(int x, int y, char nuevoValor) {
         mapa[x][y] = nuevoValor;
 }
 
-int Mazmorra::getFilas() const {
+int Mazmorra::getFilas() {
     return filas;
 }
 
-int Mazmorra::getColumnas() const {
+int Mazmorra::getColumnas() {
     return columnas;
 }
 

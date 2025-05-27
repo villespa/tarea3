@@ -15,15 +15,15 @@ private:
 
 public:
     Mazmorra(int filas, int columnas, const std::vector<std::vector<char>>& mapa,
-             const std::vector<Enemigo>& enemigos);
+             std::vector<Enemigo>& enemigos);
 
-    void mostrarMapa() const;
+    void mostrarMapa() ;
 
     char obtenerElemento(int x, int y);
     void modificarElemento(int x, int y, char nuevoValor);
 
-    int getFilas() const;
-    int getColumnas() const;
+    int getFilas();
+    int getColumnas();
 
     std::pair<int, int> dondeSeMueveJugador(Jugador& jugador);
 

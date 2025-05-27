@@ -41,7 +41,9 @@ Mazmorra Juego::elegirMazmorra() {
 
     Otros otros;
     bool opcionValida = false;
-    std::vector<Mazmorra> mazmorras = otros.cargarMazmorrasCSV("/home/pbn/tarea3/mazmorras.csv").first;
+
+    dungeonsPath = this->getDungeonsPath();
+    std::vector<Mazmorra> mazmorras = otros.cargarMazmorrasCSV(dungeonsPath).first;
     std::cout << "=== Selección de Mazmorras ===" << std::endl;
     for (size_t i = 0; i < mazmorras.size(); ++i) {
         std::cout << "Mazmorras #" << i + 1 << ": " << mazmorras[i].getFilas() << "x" << mazmorras[i].getColumnas() << std::endl;
@@ -74,12 +76,15 @@ std::pair<Jugador, Mazmorra> Juego::iniciarJuego() {
     std::cout << "Bienvenido al juego!" << std::endl;
     //std::cout << "Jugador creado en la posición inicial (0, 0)." << std::endl;
 
-    otros.mostrarMazmorras(otros.cargarMazmorrasCSV(this -> getDungeonsPath()).first);
+    dungeonsPath = this->getDungeonsPath();
+
+    mazmorras = otros.cargarMazmorrasCSV(dungeonsPath).first;
+    otros.mostrarMazmorras(mazmorras);
 
     Mazmorra mazmorraElegida = elegirMazmorra();
-    std::vector<Mazmorra> vectorMazmorras = otros.cargarMazmorrasCSV("/home/pbn/tarea3/mazmorras.csv").first;
+    std::vector<Mazmorra> vectorMazmorras = otros.cargarMazmorrasCSV(dungeonsPath).first;
 
-    SalaJefe salaJefeElegida = otros.cargarMazmorrasCSV("/home/pbn/tarea3/mazmorras.csv").second[this -> getSeleccionMazmorra() - 1];
+    SalaJefe salaJefeElegida = otros.cargarMazmorrasCSV(dungeonsPath).second[this -> getSeleccionMazmorra() - 1];
 
     //std::pair<std::vector<Enemigo>, std::vector<Boss>> enemigosYJefes = otros.cargarEnemigosCSV("/home/pbn/tarea3/enemigos.csv");
     std::pair<std::vector<Enemigo>, Boss> enemigosYJefes = otros.cargarEnemigosMazmorraElegidaCSV(this -> getSeleccionMazmorra() - 1, getEnemiesPath());
@@ -131,6 +136,25 @@ void Juego::recibirDanoEnRango(Jugador& jugador, std::vector<Enemigo>& enemigos)
     }
 }
 
+void Juego::recibirDanoEnRangoSalaJefe(Jugador& jugador, std::vector<Enemigo>& enemigos) {
+
+    for (long unsigned int i = 0; i < enemigos.size(); i++) {
+
+        if (enemigos[i].getVida() <= 0) {
+            continue; // Continuar al siguiente enemigo
+        }
+
+        if (jugador.estaEnRango(enemigos[i])) {
+            std::cout << "Enemigo en rango, te ataca!" << std::endl;
+            std::cout << "   Posición: (" << enemigos[i].getX() << ", " << enemigos[i].getY() << ")" << std::endl;
+            std::cout << "   Vida: " << enemigos[i].getVida() << std::endl;
+            std::cout << "   Rango: " << enemigos[i].getRango() << std::endl;
+            enemigos[i].atacar(jugador);
+    
+    
+        }
+    }
+}
 
 int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
     Otros otros;
@@ -147,7 +171,10 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
     jugador.setX(posicionDeL.second);
     jugador.setY(posicionDeL.first);
 
-    while (jugador.getVida() > 0 && mazmorraElegida.getColumnas() > 0) {
+
+    
+
+    while (jugador.getVida() > 0) {
         mostrarInstrucciones();
         char instruccion;
 
@@ -169,12 +196,7 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
                 mazmorraElegida.modificarElemento(jugador.getY(), jugador.getX(), '-');
                 jugador.mover();
                 mazmorraElegida.modificarElemento(jugador.getY(), jugador.getX(), 'L');
-                //std::cout << "Jugador se ha movido a la posición: (" << jugador.getX() << ", " << jugador.getY() << ")" << std::endl;
             } else {
-                //std::cout << "No se puede mover a la posición: (" << futuraPos.first << ", " << futuraPos.second << ")" << std::endl;
-                //std::cout << "Elemento en la posición: " << mazmorraElegida.obtenerElemento(futuraPos.first, futuraPos.second) << std::endl;
-                //std::cout << "Posición actual: (" << jugador.getX() << ", " << jugador.getY() << ")" << std::endl;
-                //std::cout << "Elemento en la posición actual: " << mazmorraElegida.obtenerElemento(jugador.getY(), jugador.getX()) << std::endl;
                 std::cout << "Movimiento no permitido." << std::endl;
                 break;
         
@@ -183,7 +205,6 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
         }
 
         case 'd': {
-
             jugador.setDireccion();
             std::cout << "Dirección cambiada a: " << jugador.getDireccion() << std::endl;
             break;
@@ -199,29 +220,27 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
             std::pair<int,int> elementoXY = mazmorraElegida.dondeSeMueveJugador(jugador);
             char elemento = mazmorraElegida.obtenerElemento(elementoXY.first, elementoXY.second);
             if (elemento == 'C' || elemento == 'c') {
-                //std::cout << "Abriendo cofre..." << std::endl;
                 jugador.abrirCofre(mazmorraElegida); // o seria mejor usar mazmorraElegida.abrirCofre()?
                 mazmorraElegida.modificarElemento(elementoXY.second, elementoXY.first, '-');
                 jugador.incrementarLlaves();
                 std::cout << "Cofre abierto!" << std::endl;
 
-            } else if (elemento == 'K' || elemento == 'k') {
-                //std::cout <<  "abriendo cofre de jefe..." << std::endl;
+            } else if ((elemento == 'K' || elemento == 'k')) {
                 jugador.abrirCofre(mazmorraElegida); // o seria mejor usar mazmorraElegida.abrirCofre()?
                 mazmorraElegida.modificarElemento(elementoXY.second, elementoXY.first, '-');
                 jugador.incrementarLlavesJefe();
                 std::cout << "Cofre de jefe abierto!" << std::endl;
 
             } else if ((elemento == 'p' || elemento == 'P') && jugador.getLlaves() > 0) {
-                //std::cout << "Abriendo puerta..." << std::endl;
                 jugador.abrirPuerta(); //o seria mejor usar mazmorraElegida.abrirPuerta()?
                 jugador.usarLlave();
                 mazmorraElegida.modificarElemento(elementoXY.second, elementoXY.first, '-');
                 std::cout << "Puerta abierta!" << std::endl;
             } else if ((elemento == 'y' || elemento == 'Y') && jugador.getLlavesJefe() > 0) {
-                //std::cout << "Abriendo puerta del jefe..." << std::endl;
-                jugador.entrarSalaJefe();
+                std::string caminito = getDungeonsPath();
+                SalaJefe salaJefe = SalaJefe(otros.cargarSalaJefeElejida(caminito, getSeleccionMazmorra()));
                 jugador.usarLlaveJefe();
+                mainLoopSalaJefe(jugador, salaJefe, otros);
                 mazmorraElegida.modificarElemento(elementoXY.first, elementoXY.second, '-');
                 std::cout << "Puerta del jefe abierta!" << std::endl;
             } else {
@@ -231,8 +250,10 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
         }
 
         case 'a': {
-            //std::cout << "Atacando..." << std::endl;
             if (mazmorraElegida.obtenerElemento(mazmorraElegida.dondeSeMueveJugador(jugador).first, mazmorraElegida.dondeSeMueveJugador(jugador).second) == 'E') {
+                std::cout << mazmorraElegida.dondeSeMueveJugador(jugador).first << std::endl;
+                std::cout << mazmorraElegida.dondeSeMueveJugador(jugador).second << std::endl;
+
                 jugador.atacarEnemigos(mazmorraElegida, enemigosYJefes.first);
             }
             else if (mazmorraElegida.obtenerElemento(mazmorraElegida.dondeSeMueveJugador(jugador).first, mazmorraElegida.dondeSeMueveJugador(jugador).second) == 'K') {
@@ -254,7 +275,6 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
         }
 
         case 'b': {
-            //std::cout << "Usando bomba..." << std::endl;
             if (jugador.getNumBombas() > 0) {
                 jugador.usarBomba(mazmorraElegida);
                 //mazmorraElegida.modificarElemento(mazmorraElegida.dondeSeMueveJugador(jugador).first, mazmorraElegida.dondeSeMueveJugador(jugador).second, '-');
@@ -298,3 +318,167 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
     return 0;
 }
 
+int Juego::mainLoopSalaJefe(Jugador& jugador, SalaJefe& SalaJefeElegida, Otros& otros) {
+
+    std::cout << "=== Entras a la sala del jefe ===" << std::endl;
+
+    int contador = 0;  
+
+    std::pair<int, int> posicionDeL = SalaJefeElegida.posicionInicialJugador();
+    jugador.setX(posicionDeL.second);
+    jugador.setY(posicionDeL.first);
+
+    std::pair<std::vector<Enemigo>, Boss> enemigosActuales = otros.cargarEnemigosSalaJefeElegidaCSV(this->getSeleccionMazmorra(), this->getEnemiesPath());
+    
+    while (jugador.getVida() > 0) {
+        mostrarInstrucciones();
+        char instruccion;
+
+        recibirDanoEnRango(jugador, enemigosActuales.first);
+
+
+        mostrarEstado(jugador);
+        SalaJefeElegida.mostrarMapa();
+        std::cout << "Ingrese una instrucción: ";
+        std::cout << "turno # " << contador << std::endl;
+        std::cin >> instruccion;
+        // switch (instruccion) 
+        // {
+        // case 'm': {
+        //     std::cout << "se va a mover en la dirección: " << "\033[1;33m" << jugador.getDireccion() << "\033[0m " << std::endl;
+        //     std::pair<int, int> futuraPos = SalaJefeElegida.dondeSeMueveJugador(jugador);
+
+        //     if (jugador.puedeMoverse(SalaJefeElegida, futuraPos.first, futuraPos.second)) {
+        //         SalaJefeElegida.modificarElemento(jugador.getY(), jugador.getX(), '-');
+        //         jugador.mover();
+        //         SalaJefeElegida.modificarElemento(jugador.getY(), jugador.getX(), 'L');
+        //         //std::cout << "Jugador se ha movido a la posición: (" << jugador.getX() << ", " << jugador.getY() << ")" << std::endl;
+        //     } else {
+        //         //std::cout << "No se puede mover a la posición: (" << futuraPos.first << ", " << futuraPos.second << ")" << std::endl;
+        //         //std::cout << "Elemento en la posición: " << mazmorraElegida.obtenerElemento(futuraPos.first, futuraPos.second) << std::endl;
+        //         //std::cout << "Posición actual: (" << jugador.getX() << ", " << jugador.getY() << ")" << std::endl;
+        //         //std::cout << "Elemento en la posición actual: " << mazmorraElegida.obtenerElemento(jugador.getY(), jugador.getX()) << std::endl;
+        //         std::cout << "Movimiento no permitido." << std::endl;
+        //         break;
+        
+        //     }
+        //     break;
+        // }
+
+        // case 'd': {
+
+        //     jugador.setDireccion();
+        //     std::cout << "Dirección cambiada a: " << jugador.getDireccion() << std::endl;
+        //     break;
+        // }
+
+        // case 'z': {
+        //     std::cout << "Usando habilidad: " << jugador.getDireccion() << std::endl;
+        //     jugador.usarHabilidad();
+        //     break;
+        // }
+        
+        // case 'i': {
+        //     std::pair<int,int> elementoXY = SalaJefeElegida.dondeSeMueveJugador(jugador);
+        //     char elemento = SalaJefeElegida.obtenerElemento(elementoXY.first, elementoXY.second);
+        //     if (elemento == 'C' || elemento == 'c') {
+        //         //std::cout << "Abriendo cofre..." << std::endl;
+        //         jugador.abrirCofre(mazmorraElegida); // o seria mejor usar mazmorraElegida.abrirCofre()?
+        //         mazmorraElegida.modificarElemento(elementoXY.second, elementoXY.first, '-');
+        //         jugador.incrementarLlaves();
+        //         std::cout << "Cofre abierto!" << std::endl;
+
+        //     } else if ((elemento == 'K' || elemento == 'k')) {
+        //         //std::cout <<  "abriendo cofre de jefe..." << std::endl;
+        //         jugador.abrirCofre(mazmorraElegida); // o seria mejor usar mazmorraElegida.abrirCofre()?
+        //         mazmorraElegida.modificarElemento(elementoXY.second, elementoXY.first, '-');
+        //         jugador.incrementarLlavesJefe();
+        //         std::cout << "Cofre de jefe abierto!" << std::endl;
+
+        //     } else if ((elemento == 'p' || elemento == 'P') && jugador.getLlaves() > 0) {
+        //         //std::cout << "Abriendo puerta..." << std::endl;
+        //         jugador.abrirPuerta(); //o seria mejor usar mazmorraElegida.abrirPuerta()?
+        //         jugador.usarLlave();
+        //         mazmorraElegida.modificarElemento(elementoXY.second, elementoXY.first, '-');
+        //         std::cout << "Puerta abierta!" << std::endl;
+        //     } else if ((elemento == 'y' || elemento == 'Y') && jugador.getLlavesJefe() > 0) {
+        //         //std::cout << "Abriendo puerta del jefe..." << std::endl;
+        //         entrarSalaJefe(Jugador& jugador, SalaJefe& salaJefeElegida);
+        //         jugador.usarLlaveJefe();
+        //         mazmorraElegida.modificarElemento(elementoXY.first, elementoXY.second, '-');
+        //         std::cout << "Puerta del jefe abierta!" << std::endl;
+        //     } else {
+        //         std::cout << "No se puede interactuar" << std::endl;
+        //     }
+        //     break;
+        // }
+
+        // case 'a': {
+        //     //std::cout << "Atacando..." << std::endl;
+        //     if (mazmorraElegida.obtenerElemento(mazmorraElegida.dondeSeMueveJugador(jugador).first, mazmorraElegida.dondeSeMueveJugador(jugador).second) == 'E') {
+        //         jugador.atacarEnemigos(mazmorraElegida, enemigosYJefes.first);
+        //     }
+        //     else if (mazmorraElegida.obtenerElemento(mazmorraElegida.dondeSeMueveJugador(jugador).first, mazmorraElegida.dondeSeMueveJugador(jugador).second) == 'K') {
+        //         std::cout << "¡Has encontrado al jefe!" << std::endl;
+        //         jugador.entrarSalaJefe();
+        //     }
+        //     else {
+        //         std::cout << "No hay enemigos en esta posición." << std::endl;
+        //     }
+
+        //     for (long unsigned int i = 0; i < enemigosYJefes.first.size(); i++) {
+        //         if (enemigosYJefes.first[i].getVida() <= 0) {
+        //             std::cout << "Enemigo derrotado!" << std::endl;
+        //             mazmorraElegida.modificarElemento(enemigosYJefes.first[i].getY(), enemigosYJefes.first[i].getX(), '-');
+        //             break;
+        //         }
+        //     }
+        //     break;
+        // }
+
+        // case 'b': {
+        //     //std::cout << "Usando bomba..." << std::endl;
+        //     if (jugador.getNumBombas() > 0) {
+        //         jugador.usarBomba(mazmorraElegida);
+        //         //mazmorraElegida.modificarElemento(mazmorraElegida.dondeSeMueveJugador(jugador).first, mazmorraElegida.dondeSeMueveJugador(jugador).second, '-');
+        //         mazmorraElegida.modificarElemento(mazmorraElegida.dondeSeMueveJugador(jugador).second, mazmorraElegida.dondeSeMueveJugador(jugador).first, '-');
+
+        //         std::cout << "Bomba usada!" << std::endl;
+        //     } else {
+        //         std::cout << "No tienes bombas disponibles." << std::endl;
+        //     }
+        //     break;
+        // }
+
+        // case 'p': {
+        //     std::cout << "Saliendo del juego..." << std::endl;
+        //     return 0;
+        // }
+
+        // case 'e': {
+        //     //std::cout << "Mostrando inventario..." << std::endl;
+        //     jugador.mostrarInventario();
+        //     break;
+        // }
+
+        // default:
+        //     std::cout << "Instrucción no válida. Intente de nuevo." << std::endl;
+        //     break;
+        // }
+        
+
+        contador++;
+        }
+    
+
+    std::cout << "Juego terminado." << std::endl;
+    std::cout << "===Datos de la partida===" << std::endl;
+    std::cout << "pasos: " << jugador.getPasos() << std::endl;
+    std::cout << "Cofres abiertos: " << jugador.getCofresAbiertos() << std::endl;
+    std::cout << "Puertas abiertas: " << jugador.getPuertasAbiertas() << std::endl;
+    std::cout << "Enemigos derrotados: " << jugador.getEnemigosDerrotados() << std::endl;
+
+
+    return 0;
+}
+    

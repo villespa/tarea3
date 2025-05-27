@@ -26,11 +26,18 @@ public:
     void setColumnas(int columnas);
     void setPosicionEntradaJefe(int x, int y);
 
-    int getFilas() const;
-    int getColumnas() const;
+    int getFilas();
+    int getColumnas();
+
+    void mostrarMapa();
+
+    char obtenerElemento(int x, int y);
+    void modificarElemento(int x, int y, char nuevoValor);
 
 
-    // Agrega aquí otros métodos como mover enemigos, aplicar daño, etc.
+    std::pair<int, int> dondeSeMueveJugador(Jugador& jugador);
+
+    std::pair<int, int> posicionInicialJugador();
 };
 
 #endif

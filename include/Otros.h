@@ -15,12 +15,12 @@
 
 class Otros {
 public:
+
+    bool jefeEncontrado;
+
+    std::pair<std::vector<Mazmorra>, std::vector<SalaJefe>> cargarMazmorrasCSV(std::string& path);
     
-    // Función para cargar datos de mazmorras desde un archivo CSV
-    std::pair<std::vector<Mazmorra>, std::vector<SalaJefe>> cargarMazmorrasCSV(const std::string& path);
-    
-    // Función para cargar datos de enemigos desde un archivo CSV
-    std::pair<std::vector<Enemigo>, std::vector<Boss>> cargarEnemigosCSV(const std::string& path);
+    std::pair<std::vector<Enemigo>, std::vector<Boss>> cargarEnemigosCSV(std::string& path);
     
     void mostrarMazmorras(std::vector<Mazmorra> mazmorras);
 
@@ -28,7 +28,9 @@ public:
 
     std::vector<Enemigo> filtrarEnemigosPorMapa(std::vector<Enemigo> enemigos, Mazmorra& mazmorraElegida);
 
-    
+    std::pair<std::vector<Enemigo>, Boss> cargarEnemigosSalaJefeElegidaCSV(long unsigned int seleccionMazmorra, std::string path);
+
+    SalaJefe cargarSalaJefeElejida(std::string& path, int seleccion);
 
 };
 
