@@ -26,6 +26,8 @@ class Juego
 
 public:
 
+    bool jefeVencido;
+
     void recibirDanoEnRango(Jugador& jugador, std::vector<Enemigo>& enemigos);
 
     Mazmorra  elegirMazmorra();

@@ -174,7 +174,7 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
 
     
 
-    while (jugador.getVida() > 0) {
+    while (jugador.getVida() > 0 or jefeVencido==true) {
         mostrarInstrucciones();
         char instruccion;
 
