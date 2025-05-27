@@ -52,6 +52,7 @@ public:
     int getPuertasAbiertas();
     std::string getDireccion();
     int getNumBombas();
+    int getEnemigosDerrotados();
 
     //acciones
     void mover();

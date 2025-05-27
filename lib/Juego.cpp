@@ -136,6 +136,10 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
     Otros otros;
 
     std::pair<std::vector<Enemigo>, Boss> enemigosYJefes = otros.cargarEnemigosMazmorraElegidaCSV(this -> getSeleccionMazmorra() - 1, getEnemiesPath());
+    std::vector<Enemigo> enemigos = otros.filtrarEnemigosPorMapa(enemigosYJefes.first, mazmorraElegida);
+    
+    enemigosYJefes = std::make_pair(enemigos, enemigosYJefes.second);
+
 
     int contador = 0;  
 
@@ -253,7 +257,9 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
             std::cout << "Usando bomba..." << std::endl;
             if (jugador.getNumBombas() > 0) {
                 jugador.usarBomba(mazmorraElegida);
-                mazmorraElegida.modificarElemento(jugador.getY(), jugador.getX(), '-');
+                //mazmorraElegida.modificarElemento(mazmorraElegida.dondeSeMueveJugador(jugador).first, mazmorraElegida.dondeSeMueveJugador(jugador).second, '-');
+                mazmorraElegida.modificarElemento(mazmorraElegida.dondeSeMueveJugador(jugador).second, mazmorraElegida.dondeSeMueveJugador(jugador).first, '-');
+
                 std::cout << "Bomba usada!" << std::endl;
             } else {
                 std::cout << "No tienes bombas disponibles." << std::endl;
@@ -280,6 +286,13 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
 
         contador++;
     }
+
+    std::cout << "Juego terminado." << std::endl;
+    std::cout << "===Datos de la partida===" << std::endl;
+    std::cout << "pasos: " << jugador.getPasos() << std::endl;
+    std::cout << "Cofres abiertos: " << jugador.getCofresAbiertos() << std::endl;
+    std::cout << "Puertas abiertas: " << jugador.getPuertasAbiertas() << std::endl;
+    std::cout << "Enemigos derrotados: " << jugador.getEnemigosDerrotados() << std::endl;
 
 
     return 0;

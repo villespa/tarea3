@@ -26,6 +26,10 @@ public:
 
     std::pair<std::vector<Enemigo>, Boss> cargarEnemigosMazmorraElegidaCSV(long unsigned int seleccionMazmorra, std::string path);
 
+    std::vector<Enemigo> filtrarEnemigosPorMapa(std::vector<Enemigo> enemigos, Mazmorra& mazmorraElegida);
+
+    
+
 };
 
 #endif

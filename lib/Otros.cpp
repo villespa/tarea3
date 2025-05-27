@@ -9,7 +9,6 @@
 #include <sstream>
 #include <string>
 #include <vector>
-//#include <iomanip>
 
 bool esString(const std::string& str) {
     return !str.empty() && !std::isdigit(str[0]);
@@ -362,9 +361,30 @@ std::pair<std::vector<Enemigo>, Boss> Otros::cargarEnemigosMazmorraElegidaCSV(lo
     }
     archivo.close();
     
-    std::cout << "\n RESUMEN FINAL:" << std::endl;
-    std::cout << "   - Enemigos cargados: " << enemigos.size() << std::endl;
-    std::cout << "   - Jefe: " << jefe.getNombreJefe() << std::endl;
+    //std::cout << "\n RESUMEN FINAL:" << std::endl;
+    //std::cout << "   - Enemigos cargados: " << enemigos.size() << std::endl;
+    //std::cout << "   - Jefe: " << jefe.getNombreJefe() << std::endl;
     
     return std::make_pair(enemigos, jefe);
+}
+
+std::vector<Enemigo> Otros::filtrarEnemigosPorMapa(std::vector<Enemigo> enemigos, Mazmorra& mazmorraElegida) {
+    std::vector<Enemigo> enemigosFiltrados;
+
+
+    for (int i = 0; i < mazmorraElegida.getFilas(); i++) {
+        for (int j = 0; j < mazmorraElegida.getColumnas(); j++) {
+            if (mazmorraElegida.obtenerElemento(i, j) == 'E') {
+                for (unsigned long int k = 0; k < enemigos.size(); k++) {
+                    if (enemigos[k].getX() == j && enemigos[k].getY() == i) {
+                        enemigosFiltrados.push_back(enemigos[k]);// Salir del bucle si encontramos el enemigo
+                        break;
+                    }
+                    
+                }
+                
+            }
+        }
+    }
+    return enemigosFiltrados;
 }

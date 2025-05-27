@@ -254,10 +254,38 @@ bool Jugador::estaEnRango(Enemigo& enemigo) {
 
     bool rangoX = distanciaX <= rangoMax;
     bool rangoY= distanciaY <= rangoMax;
+
+    std::cout << "\n🔍 === DEBUG RANGO ===" << std::endl;
+    std::cout << "Jugador en: (" << x << ", " << y << ")" << std::endl;
+    std::cout << "Enemigo en: (" << enemigo.getX() << ", " << enemigo.getY() << ")" << std::endl;
+    std::cout << "Rango enemigo: " << enemigo.getRango() << std::endl;
+    std::cout << "Distancia X: |" << x << " - " << enemigo.getX() << "| = " << distanciaX << std::endl;
+    std::cout << "Distancia Y: |" << y << " - " << enemigo.getY() << "| = " << distanciaY << std::endl;
+    std::cout << "RangoMax calculado: (" << enemigo.getRango() << " - 1) / 2 = " << rangoMax << std::endl;
+    std::cout << "¿Distancia X <= rangoMax? " << distanciaX << " <= " << rangoMax << " = " << (rangoX ? "SÍ" : "NO") << std::endl;
+    std::cout << "¿Distancia Y <= rangoMax? " << distanciaY << " <= " << rangoMax << " = " << (rangoY ? "SÍ" : "NO") << std::endl;
+    std::cout << "Resultado final: " << (rangoX && rangoY ? "EN RANGO" : "FUERA DE RANGO") << std::endl;
+    std::cout << "===================" << std::endl;
     
     return (rangoX && rangoY); // El jugador puede atacar al enemigo si está dentro del rango
 }
 
+
+int Jugador::getPasos() {
+    return pasos;
+}
+
+int Jugador::getEnemigosDerrotados() {
+    return EnemigosDerrotados;
+}
+
+int Jugador::getCofresAbiertos() {
+    return cofresAbiertos;
+}
+
+int Jugador::getPuertasAbiertas() {
+    return puertasAbiertas;
+}
 
 void Jugador::recibirDano(int danoRecibido) {
     vida -= danoRecibido;
