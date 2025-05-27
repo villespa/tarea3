@@ -17,9 +17,9 @@
 int main() {
 
     Juego juego;
-    std::cout << "Bienvenido al juego!" << std::endl;
+    //std::cout << "Bienvenido al juego!" << std::endl;
     Jugador jugador(0, 0);
-    std::cout << "Jugador creado en la posición inicial (0, 0)." << std::endl;
+    //std::cout << "Jugador creado en la posición inicial (0, 0)." << std::endl;
 
     //Mazmorra mazmorraElegida = juego.elegirMazmorra();
     //std::cout << "Mazmorras elegida: " << mazmorraElegida.getFilas() << "x" << mazmorraElegida.getColumnas() << std::endl;

@@ -169,7 +169,7 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
                 mazmorraElegida.modificarElemento(jugador.getY(), jugador.getX(), '-');
                 jugador.mover();
                 mazmorraElegida.modificarElemento(jugador.getY(), jugador.getX(), 'L');
-                std::cout << "Jugador se ha movido a la posición: (" << jugador.getX() << ", " << jugador.getY() << ")" << std::endl;
+                //std::cout << "Jugador se ha movido a la posición: (" << jugador.getX() << ", " << jugador.getY() << ")" << std::endl;
             } else {
                 //std::cout << "No se puede mover a la posición: (" << futuraPos.first << ", " << futuraPos.second << ")" << std::endl;
                 //std::cout << "Elemento en la posición: " << mazmorraElegida.obtenerElemento(futuraPos.first, futuraPos.second) << std::endl;
@@ -199,27 +199,27 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
             std::pair<int,int> elementoXY = mazmorraElegida.dondeSeMueveJugador(jugador);
             char elemento = mazmorraElegida.obtenerElemento(elementoXY.first, elementoXY.second);
             if (elemento == 'C' || elemento == 'c') {
-                std::cout << "Abriendo cofre..." << std::endl;
+                //std::cout << "Abriendo cofre..." << std::endl;
                 jugador.abrirCofre(mazmorraElegida); // o seria mejor usar mazmorraElegida.abrirCofre()?
                 mazmorraElegida.modificarElemento(elementoXY.second, elementoXY.first, '-');
                 jugador.incrementarLlaves();
                 std::cout << "Cofre abierto!" << std::endl;
 
             } else if (elemento == 'K' || elemento == 'k') {
-                std::cout <<  "abriendo cofre de jefe..." << std::endl;
+                //std::cout <<  "abriendo cofre de jefe..." << std::endl;
                 jugador.abrirCofre(mazmorraElegida); // o seria mejor usar mazmorraElegida.abrirCofre()?
                 mazmorraElegida.modificarElemento(elementoXY.second, elementoXY.first, '-');
                 jugador.incrementarLlavesJefe();
                 std::cout << "Cofre de jefe abierto!" << std::endl;
 
             } else if ((elemento == 'p' || elemento == 'P') && jugador.getLlaves() > 0) {
-                std::cout << "Abriendo puerta..." << std::endl;
+                //std::cout << "Abriendo puerta..." << std::endl;
                 jugador.abrirPuerta(); //o seria mejor usar mazmorraElegida.abrirPuerta()?
                 jugador.usarLlave();
                 mazmorraElegida.modificarElemento(elementoXY.second, elementoXY.first, '-');
                 std::cout << "Puerta abierta!" << std::endl;
             } else if ((elemento == 'y' || elemento == 'Y') && jugador.getLlavesJefe() > 0) {
-                std::cout << "Abriendo puerta del jefe..." << std::endl;
+                //std::cout << "Abriendo puerta del jefe..." << std::endl;
                 jugador.entrarSalaJefe();
                 jugador.usarLlaveJefe();
                 mazmorraElegida.modificarElemento(elementoXY.first, elementoXY.second, '-');
@@ -231,7 +231,7 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
         }
 
         case 'a': {
-            std::cout << "Atacando..." << std::endl;
+            //std::cout << "Atacando..." << std::endl;
             if (mazmorraElegida.obtenerElemento(mazmorraElegida.dondeSeMueveJugador(jugador).first, mazmorraElegida.dondeSeMueveJugador(jugador).second) == 'E') {
                 jugador.atacarEnemigos(mazmorraElegida, enemigosYJefes.first);
             }
@@ -254,7 +254,7 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
         }
 
         case 'b': {
-            std::cout << "Usando bomba..." << std::endl;
+            //std::cout << "Usando bomba..." << std::endl;
             if (jugador.getNumBombas() > 0) {
                 jugador.usarBomba(mazmorraElegida);
                 //mazmorraElegida.modificarElemento(mazmorraElegida.dondeSeMueveJugador(jugador).first, mazmorraElegida.dondeSeMueveJugador(jugador).second, '-');
@@ -273,7 +273,7 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
         }
 
         case 'e': {
-            std::cout << "Mostrando inventario..." << std::endl;
+            //std::cout << "Mostrando inventario..." << std::endl;
             jugador.mostrarInventario();
             break;
         }

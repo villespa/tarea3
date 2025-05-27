@@ -108,7 +108,7 @@ void Jugador::setDireccion() {
             direccion = "derecha";
             break;
         default:
-            std::cout << "Opción invalida. Se mantien la direccion actual" << std::endl;
+            std::cout << "Opción invalida. Se mantiene la direccion actual" << std::endl;
             return; // Salir sin cambiar la dirección
     }
 
@@ -137,7 +137,7 @@ bool Jugador::puedeMoverse(Mazmorra& mazmorra, int nuevoX, int nuevoY) {
 
 
     char elemento = mazmorra.obtenerElemento(nuevoX, nuevoY);
-    std::cout << "Elemento en la nueva posición: " << elemento << std::endl;
+    //std::cout << "Elemento en la nueva posición: " << elemento << std::endl;
     if (elemento == '-') {
         return true; // Espacio vacío
     }
@@ -156,7 +156,7 @@ bool Jugador::puedeMoverse(Mazmorra& mazmorra, int nuevoX, int nuevoY) {
 
 void Jugador::atacar() {
     atacando = true;
-    std::cout << "Link ataca con su espada!" << std::endl;
+    std::cout << "Link ataca con su espada" << std::endl;
 }
 
 void Jugador::usarHabilidad() {
@@ -168,7 +168,7 @@ void Jugador::usarHabilidad() {
 
 void Jugador::abrirCofre(Mazmorra& mazmorra) {
     cofresAbiertos++;
-    std::cout << "Link abre un cofre!" << std::endl;
+    //std::cout << "Link abre un cofre!" << std::endl;
     std::pair<int, int> posCofre = mazmorra.dondeSeMueveJugador(*this);
     mazmorra.modificarElemento(posCofre.first, posCofre.second, '-'); // Cambia el cofre a un espacio vacío
     std::cout << "Cofre abierto en la posición: (" << posCofre.first << ", " << posCofre.second << ")" << std::endl;
@@ -240,7 +240,7 @@ void Jugador::atacarEnemigos(Mazmorra& mazmorra, std::vector<Enemigo>& enemigos)
             }
         }
     } else {
-        std::cout << "El ataque no conectó con ningún enemigo." << std::endl;
+        std::cout << "El ataque no le da a un enemigo" << std::endl;
     }
 }
 
@@ -254,18 +254,6 @@ bool Jugador::estaEnRango(Enemigo& enemigo) {
 
     bool rangoX = distanciaX <= rangoMax;
     bool rangoY= distanciaY <= rangoMax;
-
-    std::cout << "\n🔍 === DEBUG RANGO ===" << std::endl;
-    std::cout << "Jugador en: (" << x << ", " << y << ")" << std::endl;
-    std::cout << "Enemigo en: (" << enemigo.getX() << ", " << enemigo.getY() << ")" << std::endl;
-    std::cout << "Rango enemigo: " << enemigo.getRango() << std::endl;
-    std::cout << "Distancia X: |" << x << " - " << enemigo.getX() << "| = " << distanciaX << std::endl;
-    std::cout << "Distancia Y: |" << y << " - " << enemigo.getY() << "| = " << distanciaY << std::endl;
-    std::cout << "RangoMax calculado: (" << enemigo.getRango() << " - 1) / 2 = " << rangoMax << std::endl;
-    std::cout << "¿Distancia X <= rangoMax? " << distanciaX << " <= " << rangoMax << " = " << (rangoX ? "SÍ" : "NO") << std::endl;
-    std::cout << "¿Distancia Y <= rangoMax? " << distanciaY << " <= " << rangoMax << " = " << (rangoY ? "SÍ" : "NO") << std::endl;
-    std::cout << "Resultado final: " << (rangoX && rangoY ? "EN RANGO" : "FUERA DE RANGO") << std::endl;
-    std::cout << "===================" << std::endl;
     
     return (rangoX && rangoY); // El jugador puede atacar al enemigo si está dentro del rango
 }
