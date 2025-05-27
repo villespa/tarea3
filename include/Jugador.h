@@ -6,6 +6,7 @@
 #include<vector>
 class Mazmorra;
 class Enemigo;
+class SalaJefe;
 
 class Jugador
 {
@@ -57,11 +58,16 @@ public:
     //acciones
     void mover();
     bool puedeMoverse(Mazmorra& mazmorra, int nuevoX, int nuevoY);
+    bool puedeMoverse(SalaJefe& mazmorra, int nuevoX, int nuevoY);
     void usarLlave();
     void usarBomba(Mazmorra& mazmorra);
+    void usarBomba(SalaJefe& mazmorra);
+
     void usarHabilidad();
     void atacar();
     void abrirCofre(Mazmorra& mazmorra);
+    void abrirCofre(SalaJefe& mazmorra);
+
     void abrirPuerta();
     void entrarSalaJefe();
     void usarLlaveJefe();
@@ -73,13 +79,15 @@ public:
 
     // Métodos de combate
     void atacarEnemigos(Mazmorra& mazmorra, std::vector<Enemigo>& enemigos);
+    void atacarEnemigos(SalaJefe& mazmorra, std::vector<Enemigo>& enemigos);
+
     bool estaEnRango(Enemigo& enemigo);
     void recibirDano(int dano);
     
     // Getters adicionales para combate
-    int getDano() const;
-    int getRango() const;
-    bool estaAtacando() const;
+    int getDano();
+    int getRango();
+    bool estaAtacando();
     
     // Setters para estados
     void setAtacando(bool estado);

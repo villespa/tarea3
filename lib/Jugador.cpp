@@ -2,6 +2,7 @@
 #include <string>
 #include "../include/Jugador.h"
 #include "../include/Mazmorra.h"
+#include "../include/SalaJefe.h"
 
 void Jugador::setX(int x) {
     this->x = x;
@@ -51,6 +52,19 @@ void Jugador::usarBomba(Mazmorra& mazmorra) {
         std::cout << "No tienes bombas disponibles!" << std::endl;
     }
 }
+
+void Jugador::usarBomba(SalaJefe& mazmorra) {
+    if (numBombas > 0) {
+        numBombas--;
+        std::pair<int, int> posBomba = mazmorra.dondeSeMueveJugador(*this);
+        std::cout << "Bomba colocada en: (" << posBomba.first << ", " << posBomba.second << ")" << std::endl;
+        mazmorra.modificarElemento(posBomba.first, posBomba.second, '-'); 
+        std::cout << "Link usa una bomba! Bombas restantes: " << numBombas << std::endl;
+    } else {
+        std::cout << "No tienes bombas disponibles!" << std::endl;
+    }
+}
+
 
 std::string Jugador::getDireccion() {
     return direccion;
@@ -147,12 +161,35 @@ bool Jugador::puedeMoverse(Mazmorra& mazmorra, int nuevoX, int nuevoY) {
         return true; // Puerta
     }
     else if ((elemento == 'y' || elemento == 'Y') && llavesJefe > 0) {
-        llavesJefe--;
-        std::cout << "Usas una llave de jefe" << std::endl;
-        return true; // Puerta Jefe
+        std::cout << "Interactua con esta puerta para usarla" << std::endl;
+        return false; // Puerta Jefe
     }
     return false; // No se puede mover
 }
+
+
+bool Jugador::puedeMoverse(SalaJefe& mazmorra, int nuevoX, int nuevoY) {
+    //if (nuevoX < 0 || nuevoX >= mazmorra.getFilas() || nuevoY < 0 || nuevoY >= mazmorra.getColumnas()) {
+    //    return false;
+    //}
+
+    char elemento = mazmorra.obtenerElemento(nuevoX, nuevoY);
+    //std::cout << "Elemento en la nueva posición: " << elemento << std::endl;
+    if (elemento == '-') {
+        return true; // Espacio vacío
+    }
+    else if ((elemento == 'p' || elemento == 'P') && llaves > 0) {
+        llaves--;
+        std::cout << "Usas una llave" << std::endl;
+        return true; // Puerta
+    }
+    else if ((elemento == 'y' || elemento == 'Y') && llavesJefe > 0) {
+        std::cout << "Interactua con esta puerta para usarla" << std::endl;
+        return false; // Puerta Jefe
+    }
+    return false; // No se puede mover
+}
+
 
 void Jugador::atacar() {
     atacando = true;
@@ -173,6 +210,17 @@ void Jugador::abrirCofre(Mazmorra& mazmorra) {
     mazmorra.modificarElemento(posCofre.first, posCofre.second, '-'); // Cambia el cofre a un espacio vacío
     std::cout << "Cofre abierto en la posición: (" << posCofre.first << ", " << posCofre.second << ")" << std::endl;
 }
+void Jugador::abrirCofre(SalaJefe& mazmorra) {
+    cofresAbiertos++;
+    //std::cout << "Link abre un cofre!" << std::endl;
+    std::pair<int, int> posCofre = mazmorra.dondeSeMueveJugador(*this);
+    mazmorra.modificarElemento(posCofre.first, posCofre.second, '-'); // Cambia el cofre a un espacio vacío
+    std::cout << "Cofre abierto en la posición: (" << posCofre.first << ", " << posCofre.second << ")" << std::endl;
+}
+
+
+
+
 void Jugador::abrirPuerta() {
     puertasAbiertas++;
     std::cout << "Link abre una puerta!" << std::endl;
@@ -202,6 +250,7 @@ void Jugador::mostrarInventario() {
 }
 
 
+
 void Jugador::atacarEnemigos(Mazmorra& mazmorra, std::vector<Enemigo>& enemigos) {
     atacando = true;
     std::cout << "Link ataca con su espada!" << std::endl;
@@ -221,7 +270,51 @@ void Jugador::atacarEnemigos(Mazmorra& mazmorra, std::vector<Enemigo>& enemigos)
     }
 
     
-    // Verificar si hay un enemigo en la posición de ataque
+    char elemento = mazmorra.obtenerElemento(ataqueX, ataqueY);
+    if (elemento == 'E' || elemento == 'J') {
+        std::cout << "¡Golpe conectado! Enemigo recibe " << dano << " de daño." << std::endl;
+        for (long unsigned int i = 0; i < enemigos.size(); i++) {
+            std::cout << i << std::endl;
+            if (enemigos[i].getX() == ataqueX && enemigos[i].getY() == ataqueY) {
+
+                std::cout << "Enemigo encontrado en la posición (" << ataqueX << ", " << ataqueY << ")." << std::endl;
+                std::cout << "Vida del enemigo antes del ataque: " << enemigos[i].getVida() << std::endl;
+                enemigos[i].recibirDano(dano);
+                std::cout << "Vida del enemigo después del ataque: " << enemigos[i].getVida() << std::endl;
+                
+
+                if (enemigos[i].getVida() <= 0) {
+                    EnemigosDerrotados++;
+                    std::cout << "Enemigo derrotado!" << std::endl;
+                }
+            
+                break; // Salir del bucle una vez que se ha encontrado y atacado al enemigo
+            }
+        }
+    } else {
+        std::cout << "El ataque no le da a un enemigo" << std::endl;
+    }
+}
+
+void Jugador::atacarEnemigos(SalaJefe& mazmorra, std::vector<Enemigo>& enemigos) {
+    atacando = true;
+    std::cout << "Link ataca con su espada!" << std::endl;
+    
+    // Calcular posición de ataque según la dirección
+    int ataqueX = x;
+    int ataqueY = y;
+    
+    if (direccion == "arriba") {
+        ataqueY--;
+    } else if (direccion == "abajo") {
+        ataqueY++;
+    } else if (direccion == "izquierda") {
+        ataqueX--;
+    } else if (direccion == "derecha") {
+        ataqueX++;
+    }
+
+    
     char elemento = mazmorra.obtenerElemento(ataqueX, ataqueY);
     if (elemento == 'E' || elemento == 'J') {
         std::cout << "¡Golpe conectado! Enemigo recibe " << dano << " de daño." << std::endl;
@@ -290,15 +383,15 @@ void Jugador::recibirDano(int danoRecibido) {
     }
 }
 
-int Jugador::getDano() const {
+int Jugador::getDano() {
     return dano;
 }
 
-int Jugador::getRango() const {
+int Jugador::getRango() {
     return rango;
 }
 
-bool Jugador::estaAtacando() const {
+bool Jugador::estaAtacando() {
     return atacando;
 }
 

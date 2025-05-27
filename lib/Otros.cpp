@@ -203,7 +203,6 @@ std::pair<std::vector<Enemigo>, Boss> Otros::cargarEnemigosMazmorraElegidaCSV(lo
             
             // Procesar enemigos hasta que encontremos el jefe
             while (std::getline(ss, valor, ',')) {
-                std::cout << "\n🔍 Token leído: '" << valor << "'" << std::endl;
                 
                 // Intentar procesar como enemigo
                 try {
@@ -360,7 +359,6 @@ std::pair<std::vector<Enemigo>, Boss> Otros::cargarEnemigosSalaJefeElegidaCSV(lo
             jefeEncontrado = false;
 
             while (std::getline(ss, valor, ',')) {
-                std::cout << "\n🔍 Token leído: '" << valor << "'" << std::endl;
                 
                 try {
                     if (jefeEncontrado == true) {
@@ -463,12 +461,18 @@ std::pair<std::vector<Enemigo>, Boss> Otros::cargarEnemigosSalaJefeElegidaCSV(lo
 std::vector<Enemigo> Otros::filtrarEnemigosPorMapa(std::vector<Enemigo> enemigos, Mazmorra& mazmorraElegida) {
     std::vector<Enemigo> enemigosFiltrados;
 
+    for (unsigned long int k = 0; k < enemigos.size(); k++) {
+        std::cout << "  Enemigo " << k << ": (" << enemigos[k].getX() << ", " << enemigos[k].getY() << ")" << std::endl;
+    }
 
     for (int i = 0; i < mazmorraElegida.getFilas(); i++) {
         for (int j = 0; j < mazmorraElegida.getColumnas(); j++) {
             if (mazmorraElegida.obtenerElemento(i, j) == 'E') {
+
+                std::cout << "  Encontrada 'E' en mapa: (" << i << ", " << j << ")" << std::endl;                
                 for (unsigned long int k = 0; k < enemigos.size(); k++) {
-                    if (enemigos[k].getX() == j && enemigos[k].getY() == i) {
+                    std::cout << "    Comparando con enemigo " << k << ": (" << enemigos[k].getX() << ", " << enemigos[k].getY() << ")" << std::endl;
+                    if (enemigos[k].getX() == i && enemigos[k].getY() == j) {
                         enemigosFiltrados.push_back(enemigos[k]);// Salir del bucle si encontramos el enemigo
                         break;
                     }
@@ -478,6 +482,7 @@ std::vector<Enemigo> Otros::filtrarEnemigosPorMapa(std::vector<Enemigo> enemigos
             }
         }
     }
+    std::cout << "📋 Enemigos filtrados: " << enemigosFiltrados.size() << std::endl;
     return enemigosFiltrados;
 }
 
