@@ -51,14 +51,19 @@ Mazmorra Juego::elegirMazmorra() {
     while (!opcionValida) {
     try{
         std::cout << "Selecciona una mazmorras (1-" << mazmorras.size() << "): ";
-        std::cin >> seleccionMazmorra;
+        if (!(std::cin >> seleccionMazmorra)) {
+            throw std::invalid_argument("valor invalido");
+ 
+        }
         if (seleccionMazmorra < 1 || seleccionMazmorra > mazmorras.size()) {
             throw std::invalid_argument("Número de mazmorras fuera de rango.");
         }
         opcionValida = true;
     }
-    catch (std::invalid_argument& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
+    catch (...) {
+        std::cerr << "Error, valor invalido " <<  std::endl;
+            std::cin.clear();
+            while (std::cin.get() != '\n');
     }
     }
 
@@ -190,7 +195,10 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
 
         char opcionesValidas[] = {'m', 'd', 'z', 'i', 'e', 'a', 'b', 'p'};
         try {
-            std::cin >> instruccion;
+            if (!(std::cin >> instruccion)) {
+                throw std::invalid_argument("valor invalido");
+
+            }
 
 
             bool encontrado = false;
@@ -208,6 +216,8 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
         catch (...) {
             std::cout << "instruccion invalida" << std::endl;
             std::cout << "Opciones válidas: m, d, z, i, e, a, b, p" << std::endl;
+            std::cin.clear();
+            while (std::cin.get() != '\n');
             continue;
         }
 
@@ -389,7 +399,9 @@ int Juego::mainLoopSalaJefe(Jugador& jugador, SalaJefe& salaJefeElegida, Otros& 
         char opcionesValidas[] = {'m', 'd', 'z', 'i', 'e', 'a', 'b', 'p'};
         int numOpciones = sizeof(opcionesValidas) / sizeof(opcionesValidas[0]);
         try {
-            std::cin >> instruccion;
+            if (!(std::cin >> instruccion)) {
+                throw std::invalid_argument("valor invalido");
+            }
 
 
             bool encontrado = false;
@@ -407,6 +419,8 @@ int Juego::mainLoopSalaJefe(Jugador& jugador, SalaJefe& salaJefeElegida, Otros& 
         catch (...) {
             std::cout << "instruccion invalida" << std::endl;
             std::cout << "Opciones válidas: m, d, z, i, e, a, b, p" << std::endl;
+            std::cin.clear();
+            while (std::cin.get() != '\n');
             continue;
         }
 

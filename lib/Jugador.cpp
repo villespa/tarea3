@@ -111,7 +111,10 @@ void Jugador::setDireccion() {
     int opcionesValidas[] = {1,2,3,4};
 
     try {
-        std::cin >> opcion;
+        if (!(std::cin >> opcion)) {
+            throw std::invalid_argument("valor invalido");
+
+        }
 
 
         bool encontrado = false;
@@ -129,6 +132,8 @@ void Jugador::setDireccion() {
     catch (...) {
         std::cout << "instruccion invalida" << std::endl;
         std::cout << "Opciones válidas: 1, 2, 3, 4" << std::endl;
+        std::cin.clear();
+        while (std::cin.get() != '\n');
         opcion = 1;
     }
 
