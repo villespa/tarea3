@@ -26,13 +26,14 @@ class Juego
 
 public:
 
+    void elegirHabilidades(Jugador& Jugador);
+
     bool jefeVencido;
 
     void recibirDanoEnRango(Jugador& jugador, std::vector<Enemigo>& enemigos);
 
     Mazmorra  elegirMazmorra();
     void mostrarMazmorras(int numMazmorra);
-    int elegirHabilidad();
     std::pair<Jugador, Mazmorra>  iniciarJuego();
     int mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida);    
     int mainLoopSalaJefe(Jugador& jugador, SalaJefe& SalaJefeElegida, Otros& otros);

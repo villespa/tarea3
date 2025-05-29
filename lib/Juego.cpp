@@ -100,20 +100,67 @@ std::pair<Jugador, Mazmorra> Juego::iniciarJuego() {
 }
 
 void mostrarInstrucciones() {
-    std::cout << "\n=== CONTROLES ===" << std::endl;
+    std::cout << "\n=== Controles ===" << std::endl;
     std::cout << "m = mover" << std::endl;
     std::cout << "d = cambiar direccion" << std::endl;
     std::cout << "z = usar habilidad" << std::endl;
     std::cout << "i = interactuar" << std::endl;
     std::cout << "e = mostrar inventario" << std::endl;
     std::cout << "a = atacar" << std::endl;
-    std::cout << "b = usar bomba" << std::endl;
     std::cout << "p = salir del juego" << std::endl;
     std::cout << "=================" << std::endl;
 }
 
+void Juego::elegirHabilidades(Jugador& jugador) {
+    std::cout << "\n=== Menu de habilidades ===" << std::endl;
+    std::cout << "1 = salto" << std::endl;
+    std::cout << "2 = escudo" << std::endl;
+    std::cout << "3 = arco" << std::endl;
+    std::cout << "4 = bomba" << std::endl;
+    std::cout << "5 = gancho" << std::endl;
+    std::cout << "=================" << std::endl;
+    int opcion = 0;
+    bool opcionValida = false;
+    while (!opcionValida) {
+        std::cout << "Ingrese su eleccion" << std::endl;
+
+        if (!(std::cin >> opcion)) {
+            opcionValida = false;
+            std::cin.clear();
+            while(std::cin.get() != '\n');
+        }
+        else if (opcion>=1 && opcion <=5) opcionValida =true;
+        else std::cout << "el valor no es valido" << std::endl;
+
+    }
+
+    switch (opcion)
+    {
+    case 1:
+        jugador.setHabilidad("salto");
+        break;
+    case 2:
+        jugador.setHabilidad("escudo");
+        break;
+    case 3:
+        jugador.setHabilidad("arco");
+        break;
+    case 4:
+        jugador.setHabilidad("bomba");
+        break;
+    case 5:
+        jugador.setHabilidad("gancho");
+        break;
+    default:
+        std::cout << "Opcion no es valida se pone bomba por default" << std::endl;
+        jugador.setHabilidad("bomba");
+        break;
+    }
+}
+
+
 void mostrarEstado(Jugador& jugador) {
-    std::cout << "\n=== ESTADO ===" << std::endl;
+    std::cout << "\n=== Estado ===" << std::endl;
     std::cout << "Posición: (" << jugador.getX() << ", " << jugador.getY() << ")" << std::endl;
     std::cout << "Vida: " << jugador.getVida() << std::endl;
     std::cout << "Dirección: " << jugador.getDireccion() << std::endl;
@@ -163,13 +210,17 @@ void Juego::recibirDanoEnRangoSalaJefe(Jugador& jugador, std::vector<Enemigo>& e
     }
 }
 
+
+
+
 int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
+
+    this->elegirHabilidades(jugador);
+
+
     Otros otros;
 
     std::pair<std::vector<Enemigo>, Boss> enemigosYJefes = otros.cargarEnemigosMazmorraElegidaCSV(this -> getSeleccionMazmorra() - 1, getEnemiesPath());
-    //std::vector<Enemigo> enemigos = otros.filtrarEnemigosPorMapa(enemigosYJefes.first, mazmorraElegida);
-    
-    //enemigosYJefes = std::make_pair(enemigos, enemigosYJefes.second);
 
 
     int contador = 0;  
@@ -247,7 +298,8 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
 
         case 'z': {
             std::cout << "Usando habilidad: " << jugador.getDireccion() << std::endl;
-            jugador.usarHabilidad();
+            jugador.usarHabilidad(mazmorraElegida, enemigosYJefes.first);
+
             break;
         }
         
@@ -328,19 +380,6 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
             break;
         }
 
-        case 'b': {
-            if (jugador.getNumBombas() > 0) {
-                jugador.usarBomba(mazmorraElegida);
-                //mazmorraElegida.modificarElemento(mazmorraElegida.dondeSeMueveJugador(jugador).first, mazmorraElegida.dondeSeMueveJugador(jugador).second, '-');
-                mazmorraElegida.modificarElemento(mazmorraElegida.dondeSeMueveJugador(jugador).second, mazmorraElegida.dondeSeMueveJugador(jugador).first, '-');
-
-                std::cout << "Bomba usada!" << std::endl;
-            } else {
-                std::cout << "No tienes bombas disponibles." << std::endl;
-            }
-            break;
-        }
-
         case 'p': {
             std::cout << "Saliendo del juego..." << std::endl;
             return 0;
@@ -378,6 +417,7 @@ int Juego::mainLoopSalaJefe(Jugador& jugador, SalaJefe& salaJefeElegida, Otros& 
 
     int contador = 0;  
 
+
     std::pair<int, int> posicionDeL = salaJefeElegida.posicionInicialJugador();
     jugador.setX(posicionDeL.second);
     jugador.setY(posicionDeL.first);
@@ -386,6 +426,13 @@ int Juego::mainLoopSalaJefe(Jugador& jugador, SalaJefe& salaJefeElegida, Otros& 
     
     while (jugador.getVida() > 0) {
         mostrarInstrucciones();
+
+        for (unsigned long int i=0;i<enemigosActuales.first.size();i++) {
+            if (enemigosActuales.first[i].getVida() <= 0) {
+                salaJefeElegida.modificarElemento(enemigosActuales.first[i].getX(), enemigosActuales.first[i].getY(), '-');
+            }
+        }
+
         char instruccion;
 
         recibirDanoEnRango(jugador, enemigosActuales.first);
@@ -456,7 +503,7 @@ int Juego::mainLoopSalaJefe(Jugador& jugador, SalaJefe& salaJefeElegida, Otros& 
 
         case 'z': {
             std::cout << "Usando habilidad: " << jugador.getDireccion() << std::endl;
-            jugador.usarHabilidad();
+            jugador.usarHabilidad(salaJefeElegida, enemigosActuales.first);
             break;
         }
         

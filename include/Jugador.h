@@ -41,6 +41,7 @@ public:
     void setY(int y);
     void cambiarVida(int vida);
     void setDireccion();
+    void setHabilidad(std::string habilidad);
 
     //getters
     int getX();
@@ -54,6 +55,7 @@ public:
     std::string getDireccion();
     int getNumBombas();
     int getEnemigosDerrotados();
+    std::string getHabilidad();
 
     //acciones
     void incrementarVida(int cantidad);
@@ -64,12 +66,14 @@ public:
     void usarBomba(Mazmorra& mazmorra);
     void usarBomba(SalaJefe& mazmorra);
 
-    void usarHabilidad();
+    void usarHabilidad(Mazmorra& Mazmorra, std::vector<Enemigo>& enemigos);
+    void usarHabilidad(SalaJefe& SalaJefe, std::vector<Enemigo>& enemigos);
     void atacar();
     void abrirCofre(Mazmorra& mazmorra);
     void abrirCofre(SalaJefe& mazmorra);
 
     void abrirPuerta();
+    void bajarNumBombas();
     void entrarSalaJefe();
     void usarLlaveJefe();
     void incrementarLlaves();
