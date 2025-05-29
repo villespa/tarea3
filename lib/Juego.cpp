@@ -233,6 +233,13 @@ int Juego::mainLoop(Jugador& jugador, Mazmorra& mazmorraElegida) {
     
 
     while (jugador.getVida() > 0 or jefeVencido==true) {
+
+        for (unsigned long int i=0;i<enemigosYJefes.first.size();i++) {
+            if (enemigosYJefes.first[i].getVida() <= 0) {
+                mazmorraElegida.modificarElemento(enemigosYJefes.first[i].getX(), enemigosYJefes.first[i].getY(), '-');
+            }
+        }
+
         mostrarInstrucciones();
         char instruccion;
 

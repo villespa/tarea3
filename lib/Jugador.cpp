@@ -305,30 +305,7 @@ void Jugador::usarHabilidad(Mazmorra& mazmorra, std::vector<Enemigo>& enemigos) 
     } 
     else if (habilidad == "escudo") {
 
-        std::cout << "¡Link activa su escudo!" << std::endl;
-    
-        // Determinar dirección que bloquea (opuesta a donde apunta)
-        std::string direccionBloqueada;
-        if (direccion == "arriba") direccionBloqueada = "desde abajo";
-        else if (direccion == "abajo") direccionBloqueada = "desde arriba";
-        else if (direccion == "izquierda") direccionBloqueada = "desde la derecha";
-        else if (direccion == "derecha") direccionBloqueada = "desde la izquierda";
-        
-        std::cout << "Link mira hacia " << direccion << ", el escudo protege " << direccionBloqueada << "." << std::endl;
-        
-        // Efecto simple: bonus temporal de vida/defensa
-        int vidaAnterior = vida;
-        vida += 15;
-        if (vida > 100) vida = 100;  // Límite máximo
-        
-        int vidaGanada = vida - vidaAnterior;
-        if (vidaGanada > 0) {
-            std::cout << "¡Escudo proporciona +" << vidaGanada << " de protección!" << std::endl;
-        }
-        
-        std::cout << "¡Escudo activado! Link está protegido este turno." << std::endl;
-
-        // Implementar lógica de escudo
+        this->incrementarVida(20);
         std::cout << "¡Escudo activado!" << std::endl;
         // Ejemplo: activarEscudo();
         
@@ -430,20 +407,17 @@ void Jugador::usarHabilidad(Mazmorra& mazmorra, std::vector<Enemigo>& enemigos) 
             int checkX = x;
             int checkY = y;
             
-            // Calcular posición según dirección
             if (direccion == "arriba") checkY -= distancia;
             else if (direccion == "abajo") checkY += distancia;
             else if (direccion == "izquierda") checkX -= distancia;
             else if (direccion == "derecha") checkX += distancia;
             
-            // Verificar límites del mapa
             if (checkX < 0 || checkX >= mazmorra.getColumnas() || checkY < 0 || checkY >= mazmorra.getFilas()) {
                 break;
             }
             
             char elemento = mazmorra.obtenerElemento(checkX, checkY);
             
-            // Si encuentra enemigo: hacer daño y NO mover
             if (elemento == 'E' || elemento == 'J') {
 
                 for (unsigned long int i=0; i<enemigos.size(); i++) {
@@ -452,8 +426,8 @@ void Jugador::usarHabilidad(Mazmorra& mazmorra, std::vector<Enemigo>& enemigos) 
 
                     if (enemigoX == checkX && enemigoY == checkY) {
                         enemigos[i].recibirDano(5);
-                        std::cout << "¡El gancho golpea al enemigo!" << std::endl;
-                        std::cout << "¡El enemigo recibe 5 de daño!" << std::endl;
+                        std::cout << "el gancho golpea al enemigo" << std::endl;
+                        std::cout << "el enemigo recibe 5 de daño" << std::endl;
                         break;
                     }
 
@@ -464,7 +438,6 @@ void Jugador::usarHabilidad(Mazmorra& mazmorra, std::vector<Enemigo>& enemigos) 
             }
             
             if (elemento == 'X' || elemento == 'C' || elemento == 'K') {
-                std::cout << "Gancho se engancha en: " << elemento << std::endl;
                 
                 int destinoX = x;
                 int destinoY = y;
@@ -479,7 +452,6 @@ void Jugador::usarHabilidad(Mazmorra& mazmorra, std::vector<Enemigo>& enemigos) 
                     return;
                 }
                 
-                // Verificar que el destino esté libre
                 if (destinoX >= 0 && destinoX < mazmorra.getColumnas() && destinoY >= 0 && destinoY < mazmorra.getFilas()) {
                     
                     char elementoDestino = mazmorra.obtenerElemento(destinoY, destinoX);
@@ -490,7 +462,6 @@ void Jugador::usarHabilidad(Mazmorra& mazmorra, std::vector<Enemigo>& enemigos) 
                         y = destinoY;
                         mazmorra.modificarElemento(y, x, 'L');
                         
-                        std::cout << "¡Link se mueve a (" << x << ", " << y << ")!" << std::endl;
                     } else {
                         std::cout << "Destino ocupado, no se puede mover." << std::endl;
                     }
