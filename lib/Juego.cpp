@@ -17,16 +17,16 @@ void Juego::setDungeonsPath() {
 
     std::string dungeonsPath;
     std::cout << "ingrese el camino del csv de mazmorras:" << std::endl;
-    // std::cin >> dungeonsPath;
-    dungeonsPath = "/home/pbn/tarea3/mazmorras.csv";
+    std::cin >> dungeonsPath;
+    dungeonsPath = dungeonsPath;
 
     this->dungeonsPath = dungeonsPath;
 }
 void Juego::setEnemiesPath() {
     std::string enemiesPath;
     std::cout << "ingrese el camino del csv de enemigos:" << std::endl;
-    // std::cin >> enemiesPath;
-    enemiesPath = "/home/pbn/tarea3/enemigos.csv";
+    std::cin >> enemiesPath;
+    enemiesPath = enemiesPath;
 
     this->enemiesPath = enemiesPath;
 }
