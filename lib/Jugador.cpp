@@ -487,11 +487,14 @@ void Jugador::bajarNumBombas() {
     numBombas-=1;
 }
 
-void Jugador::usarHabilidad(SalaJefe& salaJefe, std::vector<Enemigo>& enemigos) {
-    //usandoHabilidad = true;
-    std::cout << "Link usa su habilidad: " << habilidad << std::endl;
+void Jugador::usarHabilidad(SalaJefe& mazmorra, std::vector<Enemigo>& enemigos) {
 
-    std::cout << enemigos[1].getVida() << std::endl;
+    if (numBombas <= 0) {
+        return;
+    }    
+
+    usandoHabilidad = true;
+    std::cout << "Link usa su habilidad: " << habilidad << std::endl;
 
     std::string habilidadActiva = this->getHabilidad();
 
@@ -499,9 +502,9 @@ void Jugador::usarHabilidad(SalaJefe& salaJefe, std::vector<Enemigo>& enemigos) 
         // Implementar lógica de bomba
 
         if (this->getNumBombas() > 0) {
-            this->usarBomba(salaJefe);
+            this->usarBomba(mazmorra);
             //mazmorraElegida.modificarElemento(mazmorraElegida.dondeSeMueveJugador(jugador).first, mazmorraElegida.dondeSeMueveJugador(jugador).second, '-');
-            salaJefe.modificarElemento(salaJefe.dondeSeMueveJugador(*this).second, salaJefe.dondeSeMueveJugador(*this).first, '-');
+            mazmorra.modificarElemento(mazmorra.dondeSeMueveJugador(*this).second, mazmorra.dondeSeMueveJugador(*this).first, '-');
 
             std::cout << "Bomba usada!" << std::endl;
         } else {
@@ -523,62 +526,38 @@ void Jugador::usarHabilidad(SalaJefe& salaJefe, std::vector<Enemigo>& enemigos) 
 
 
 
-        if (nuevoX < 0 || nuevoX >= salaJefe.getColumnas() || nuevoY < 0 || nuevoY >= salaJefe.getFilas()) {
+        if (nuevoX < 0 || nuevoX >= mazmorra.getColumnas() || nuevoY < 0 || nuevoY >= mazmorra.getFilas()) {
         std::cout << "Salto fuera del mapa. Link pierde el turno." << std::endl;
         return;
         }
 
-        char elementoMedio = salaJefe.obtenerElemento(medioY, medioX);
-        if (elementoMedio == 'X' || elementoMedio == 'E' || elementoMedio == 'J' || elementoMedio == 'P' || elementoMedio == 'Y') {
+        char elementoMedio = mazmorra.obtenerElemento(medioX, medioY);
+        if (elementoMedio == 'X' || elementoMedio == 'E' || elementoMedio == 'J' || elementoMedio == 'P' || elementoMedio == 'Y' || elementoMedio == 'C') {
         std::cout << "Salto fallido: obstáculo en el camino (" << elementoMedio << "). Link pierde el turno." << std::endl;
         return;
         }
 
-        char elementoDestino = salaJefe.obtenerElemento(nuevoY, nuevoX);
-        if (elementoDestino == 'X' || elementoDestino == 'E' || elementoDestino == 'J' || 
-        elementoDestino == 'P' || elementoDestino == 'Y') {
+        char elementoDestino = mazmorra.obtenerElemento(nuevoX, nuevoY);
+        if (elementoDestino == 'X' || elementoDestino == 'E' || elementoDestino == 'J' || elementoDestino == 'P' || elementoDestino == 'Y' || elementoDestino == 'C') {
         std::cout << "Salto fallido: obstáculo en el destino (" << elementoDestino << "). Link pierde el turno." << std::endl;
         return;
         }
 
+
         std::cout << "se salta hacia " << direccion << "!" << std::endl;
     
-        salaJefe.modificarElemento(y, x, '-');
-        
+        mazmorra.modificarElemento(y,x, '-');
         x = nuevoX;
         y = nuevoY;
         
-        salaJefe.modificarElemento(y, x, 'L');
+        mazmorra.modificarElemento(y, x, 'L');
         
         std::cout << "Link aterriza en (" << x << ", " << y << ")." << std::endl;
 
     } 
     else if (habilidad == "escudo") {
 
-        std::cout << "¡Link activa su escudo!" << std::endl;
-    
-        // Determinar dirección que bloquea (opuesta a donde apunta)
-        std::string direccionBloqueada;
-        if (direccion == "arriba") direccionBloqueada = "desde abajo";
-        else if (direccion == "abajo") direccionBloqueada = "desde arriba";
-        else if (direccion == "izquierda") direccionBloqueada = "desde la derecha";
-        else if (direccion == "derecha") direccionBloqueada = "desde la izquierda";
-        
-        std::cout << "Link mira hacia " << direccion << ", el escudo protege " << direccionBloqueada << "." << std::endl;
-        
-        // Efecto simple: bonus temporal de vida/defensa
-        int vidaAnterior = vida;
-        vida += 15;
-        if (vida > 100) vida = 100;  // Límite máximo
-        
-        int vidaGanada = vida - vidaAnterior;
-        if (vidaGanada > 0) {
-            std::cout << "¡Escudo proporciona +" << vidaGanada << " de protección!" << std::endl;
-        }
-        
-        std::cout << "¡Escudo activado! Link está protegido este turno." << std::endl;
-
-        // Implementar lógica de escudo
+        this->incrementarVida(20);
         std::cout << "¡Escudo activado!" << std::endl;
         // Ejemplo: activarEscudo();
         
@@ -600,13 +579,13 @@ void Jugador::usarHabilidad(SalaJefe& salaJefe, std::vector<Enemigo>& enemigos) 
             else if (direccion == "derecha") checkX += dist;
             
             // Verificar límites
-            if (checkX < 0 || checkX >= salaJefe.getColumnas() || 
-                checkY < 0 || checkY >= salaJefe.getFilas()) {
+            if (checkX < 0 || checkX >= mazmorra.getColumnas() || 
+                checkY < 0 || checkY >= mazmorra.getFilas()) {
                 break;
             }
             
             // Verificar obstáculos
-            char elemento = salaJefe.obtenerElemento(checkY, checkX);
+            char elemento = mazmorra.obtenerElemento(checkY, checkX);
             if (elemento == 'X' || elemento == 'P' || elemento == 'Y') {
                 std::cout << "Flecha se detiene al chocar con '" << elemento << "'." << std::endl;
                 break;
@@ -640,8 +619,8 @@ void Jugador::usarHabilidad(SalaJefe& salaJefe, std::vector<Enemigo>& enemigos) 
                 int targetY = centroY + offsetY;
                 
                 // Verificar límites
-                if (targetX < 0 || targetX >= salaJefe.getColumnas() || 
-                    targetY < 0 || targetY >= salaJefe.getFilas()) {
+                if (targetX < 0 || targetX >= mazmorra.getColumnas() || 
+                    targetY < 0 || targetY >= mazmorra.getFilas()) {
                     continue;
                 }
                 
@@ -655,7 +634,7 @@ void Jugador::usarHabilidad(SalaJefe& salaJefe, std::vector<Enemigo>& enemigos) 
                 if (!enDireccionCorrecta) continue;
                 
                 // Verificar enemigo
-                char elemento = salaJefe.obtenerElemento(targetY, targetX);
+                char elemento = mazmorra.obtenerElemento(targetY, targetX);
                 if (elemento == 'E' || elemento == 'J') {
                     std::cout << "¡Enemigo golpeado en (" << targetX << ", " << targetY << ")!" << std::endl;
                     enemigosGolpeados++;
@@ -673,42 +652,45 @@ void Jugador::usarHabilidad(SalaJefe& salaJefe, std::vector<Enemigo>& enemigos) 
 
     } 
     else if (habilidad == "gancho") {
-        // Implementar lógica de gancho
 
-        std::cout << "se usa el gancho hacia " << direccion << "!" << std::endl;
+        std::cout << "se usa el gancho hacia " << direccion << std::endl;
         
-        // Buscar objetivo en línea recta
         for (int distancia = 1; distancia <= 10; distancia++) {
             int checkX = x;
             int checkY = y;
             
-            // Calcular posición según dirección
             if (direccion == "arriba") checkY -= distancia;
             else if (direccion == "abajo") checkY += distancia;
             else if (direccion == "izquierda") checkX -= distancia;
             else if (direccion == "derecha") checkX += distancia;
             
-            // Verificar límites del mapa
-            if (checkX < 0 || checkX >= salaJefe.getColumnas() || 
-                checkY < 0 || checkY >= salaJefe.getFilas()) {
+            if (checkX < 0 || checkX >= mazmorra.getColumnas() || checkY < 0 || checkY >= mazmorra.getFilas()) {
                 break;
             }
             
-            char elemento = salaJefe.obtenerElemento(checkY, checkX);
+            char elemento = mazmorra.obtenerElemento(checkX, checkY);
             
-            // Si encuentra enemigo: hacer daño y NO mover
             if (elemento == 'E' || elemento == 'J') {
-                std::cout << "¡El gancho golpea al enemigo!" << std::endl;
-                std::cout << "¡El enemigo recibe 5 de daño!" << std::endl;
+
+                for (unsigned long int i=0; i<enemigos.size(); i++) {
+                    int enemigoX = enemigos[i].getX();
+                    int enemigoY = enemigos[i].getY(); 
+
+                    if (enemigoX == checkX && enemigoY == checkY) {
+                        enemigos[i].recibirDano(5);
+                        std::cout << "el gancho golpea al enemigo" << std::endl;
+                        std::cout << "el enemigo recibe 5 de daño" << std::endl;
+                        break;
+                    }
+
+                }
+
                 std::cout << "Link permanece en su lugar." << std::endl;
                 return;
             }
             
-            // Si encuentra muro o cofre: intentar moverse
             if (elemento == 'X' || elemento == 'C' || elemento == 'K') {
-                std::cout << "¡Gancho se engancha en '" << elemento << "'!" << std::endl;
                 
-                // Calcular destino (casilla anterior al objetivo)
                 int destinoX = x;
                 int destinoY = y;
                 
@@ -717,25 +699,21 @@ void Jugador::usarHabilidad(SalaJefe& salaJefe, std::vector<Enemigo>& enemigos) 
                 else if (direccion == "izquierda") destinoX = checkX + 1;
                 else if (direccion == "derecha") destinoX = checkX - 1;
                 
-                // Verificar si ya está en la posición
                 if (destinoX == x && destinoY == y) {
-                    std::cout << "Link ya está junto al objetivo." << std::endl;
+                    std::cout << "ya estas junto al objetivo." << std::endl;
                     return;
                 }
                 
-                // Verificar que el destino esté libre
-                if (destinoX >= 0 && destinoX < salaJefe.getColumnas() && 
-                    destinoY >= 0 && destinoY < salaJefe.getFilas()) {
+                if (destinoX >= 0 && destinoX < mazmorra.getColumnas() && destinoY >= 0 && destinoY < mazmorra.getFilas()) {
                     
-                    char elementoDestino = salaJefe.obtenerElemento(destinoY, destinoX);
+                    char elementoDestino = mazmorra.obtenerElemento(destinoY, destinoX);
                     if (elementoDestino == '-') {
                         // Realizar movimiento
-                        salaJefe.modificarElemento(y, x, '-');
+                        mazmorra.modificarElemento(y, x, '-');
                         x = destinoX;
                         y = destinoY;
-                        salaJefe.modificarElemento(y, x, 'L');
+                        mazmorra.modificarElemento(y, x, 'L');
                         
-                        std::cout << "¡Link se mueve a (" << x << ", " << y << ")!" << std::endl;
                     } else {
                         std::cout << "Destino ocupado, no se puede mover." << std::endl;
                     }
@@ -752,7 +730,8 @@ void Jugador::usarHabilidad(SalaJefe& salaJefe, std::vector<Enemigo>& enemigos) 
     else {
         std::cout << "Habilidad no reconocida: " << habilidad << std::endl;
     }
-
+    
+    this->bajarNumBombas();
 
 }
 
