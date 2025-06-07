@@ -1,0 +1,26 @@
+    1  sudo apt install gcc g++ gdb
+    2  cd /media/pbn/VBox_GAs_6.1.32/
+    3  ls
+    4  sudo ./runasroot.sh 
+    5  sudo ./VBoxLinuxAdditions.run 
+    6  reboot
+    7  sudo apt upgrade
+    8  sudo apt update
+    9  mkdir tarea3
+   10  cd tarea 3
+   11  cd tarea3
+   12  code .
+   13  ls
+   14  make
+   15  sudo apt install make
+   16  make
+   17  git log --oneline
+   18  git status
+   19  git log --follow -- lib/Juego.cpp
+   20  git log --all --full-history -- "**/Juego.cpp"
+   21  ls -la lib/Juego.cpp
+   22  ls -la lib/Juego.h
+   23  git show --name-status HEAD
+   24  git checkout 069d70917531e7f9660266c9e3553adad4565b84 -- lib/Juego.cpp
+   25  git checkout 069d70917531e7f9660266c9e3553adad4565b84 -- lib/Juego.h
+   26  history > historial.txt
